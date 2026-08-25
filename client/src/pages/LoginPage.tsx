@@ -38,32 +38,36 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4.5rem)] flex items-center justify-center p-4 sm:p-6 bg-slate-50">
-      <div className="max-w-md w-full my-auto">
+    <div className="min-h-screen bg-[#F8FAFC] flex flex-col justify-between p-4 sm:p-6 lg:p-8">
+      {/* Centered Main Content */}
+      <div className="max-w-md w-full mx-auto my-auto py-8">
         {/* Brand Header */}
-        <div className="text-center mb-6">
-          <div className="inline-flex p-3 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 mb-3 shadow-sm">
+        <div className="text-center mb-8">
+          <div className="inline-flex p-3 rounded-full bg-blue-100/70 border border-blue-200 text-blue-600 mb-4 shadow-sm">
             <ShieldCheck className="w-8 h-8" />
           </div>
-          <div className="mb-2.5">
-            <span className="inline-flex items-center text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 px-3 py-0.5 rounded-full">
+
+          <div className="mb-3">
+            <span className="inline-flex items-center text-xs font-semibold bg-slate-200/70 text-slate-700 px-3.5 py-1 rounded-full">
               Bellcorp Studio • Batch 08
             </span>
           </div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
             ATM Simulation Application
           </h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
-            Enter your account credentials to begin your secure session
+
+          <p className="text-sm text-slate-500 font-normal mt-2">
+            Enter your account credentials to begin your secure session.
           </p>
         </div>
 
         {/* Elevated Authentication Card */}
-        <div className="rounded-3xl bg-white border border-slate-200 p-6 sm:p-8 shadow-xl">
-          <form onSubmit={handleLogin} className="space-y-4 sm:space-y-5">
+        <div className="rounded-3xl bg-white border border-slate-200/90 p-7 sm:p-9 shadow-xl shadow-slate-200/60">
+          <form onSubmit={handleLogin} className="space-y-5">
             {/* Account Number Input */}
             <div>
-              <label className="block text-xs sm:text-sm font-black uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
                 Account Number
               </label>
               <div className="relative">
@@ -74,14 +78,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   onChange={(e) => setAccountNumber(e.target.value)}
                   placeholder="10000001"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 sm:py-4 text-slate-900 font-bold text-base sm:text-lg focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
+                  className="w-full bg-slate-100/70 border border-slate-200/90 rounded-2xl pl-12 pr-4 py-3.5 text-slate-900 font-bold text-lg focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
                 />
               </div>
             </div>
 
             {/* PIN Input */}
             <div>
-              <label className="block text-xs sm:text-sm font-black uppercase tracking-wider text-slate-700 mb-1.5">
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-2">
                 Secure PIN
               </label>
               <div className="relative">
@@ -93,7 +97,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                   onChange={(e) => setPin(e.target.value)}
                   placeholder="••••"
                   required
-                  className="w-full bg-slate-50 border border-slate-200 rounded-2xl pl-12 pr-4 py-3.5 sm:py-4 text-slate-900 font-bold text-base sm:text-lg tracking-widest focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
+                  className="w-full bg-slate-100/70 border border-slate-200/90 rounded-2xl pl-12 pr-4 py-3.5 text-slate-900 font-bold text-lg tracking-widest focus:outline-none focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 transition"
                 />
               </div>
             </div>
@@ -106,11 +110,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
               </div>
             )}
 
-            {/* Large Prominent Authenticate Button Matching Input Proportions */}
+            {/* Sign In Primary Button */}
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full h-14 mt-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-black text-base sm:text-lg shadow-lg shadow-blue-500/30 transition-all duration-150 flex items-center justify-center space-x-2.5 disabled:opacity-50 cursor-pointer"
+              className="w-full py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-base shadow-lg shadow-blue-500/25 transition-all duration-150 flex items-center justify-center space-x-2 disabled:opacity-50 cursor-pointer mt-2"
             >
               {isLoading ? (
                 <>
@@ -119,20 +123,19 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
                 </>
               ) : (
                 <>
-                  <Lock className="w-5 h-5" />
                   <span>Sign In Securely</span>
-                  <ArrowRight className="w-5 h-5 ml-1" />
+                  <ArrowRight className="w-4 h-4 ml-1" />
                 </>
               )}
             </button>
           </form>
 
-          {/* Distinct Demo Account Helper Section */}
+          {/* Demo Account Helper Button */}
           <div className="mt-5 pt-4 border-t border-slate-100">
             <button
               type="button"
               onClick={handleFillDemo}
-              className="w-full py-3.5 px-4 rounded-2xl bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 font-extrabold text-xs sm:text-sm shadow-sm transition-all duration-150 cursor-pointer flex items-center justify-center space-x-2"
+              className="w-full py-3 px-4 rounded-2xl bg-blue-50/70 hover:bg-blue-100 text-blue-700 border border-blue-200/70 font-semibold text-xs sm:text-sm transition-all duration-150 cursor-pointer flex items-center justify-center space-x-2"
             >
               <User className="w-4 h-4 text-blue-600 shrink-0" />
               <span>Use Demo Account (10000001 / 1234)</span>
@@ -140,12 +143,28 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
           </div>
         </div>
 
-        {/* Security Trust Subtext with Perfect Inline Centering */}
-        <div className="text-center text-xs text-slate-500 mt-4 font-medium flex items-center justify-center gap-1.5 flex-wrap">
-          <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-          <span>256-bit Encrypted Session • Concurrency-Safe PostgreSQL Engine</span>
+        {/* Security Trust Pill */}
+        <div className="mt-6 flex justify-center">
+          <div className="bg-slate-200/60 px-4 py-1.5 rounded-full text-xs text-slate-500 font-medium inline-flex items-center gap-1.5 shadow-sm">
+            <Lock className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <span>256-bit Encrypted Session • Concurrency-Safe PostgreSQL Engine</span>
+          </div>
         </div>
       </div>
+
+      {/* Clean Bottom Legal / Certification Footer */}
+      <footer className="w-full max-w-5xl mx-auto border-t border-slate-200/80 pt-5 pb-2 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 font-medium px-4 gap-2">
+        <div>
+          © 2026 Bellcorp Studio • Batch 08. All transactions are simulation-only.
+        </div>
+        <div className="flex items-center space-x-4">
+          <span>Security Policy</span>
+          <span>•</span>
+          <span>Technical Certification</span>
+          <span>•</span>
+          <span>Terms of Service</span>
+        </div>
+      </footer>
     </div>
   );
 };

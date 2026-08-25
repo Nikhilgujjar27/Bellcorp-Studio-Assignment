@@ -8,10 +8,12 @@ export const App: React.FC = () => {
   const { user, isAuthenticated, login, logout } = useAuth();
 
   return (
-    <div className="min-h-screen bg-fintech-bg text-fintech-text flex flex-col selection:bg-fintech-blue-soft selection:text-fintech-blue">
-      <Navbar user={user} onLogout={logout} />
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col">
+      {isAuthenticated && user && (
+        <Navbar user={user} onLogout={logout} />
+      )}
 
-      <main className="flex-1">
+      <main className="flex-1 flex flex-col">
         {!isAuthenticated || !user ? (
           <LoginPage onLoginSuccess={login} />
         ) : (
@@ -19,15 +21,17 @@ export const App: React.FC = () => {
         )}
       </main>
 
-      <footer className="border-t border-fintech-border py-6 text-center text-xs text-fintech-muted bg-white/90">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold">
-          <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-fintech-green"></span>
-            <span>ATM Simulation System • Bellcorp Studio</span>
+      {isAuthenticated && user && (
+        <footer className="border-t border-slate-200 py-6 text-center text-xs text-slate-500 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold">
+            <div className="flex items-center space-x-2">
+              <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
+              <span>ATM Simulation System • Bellcorp Studio</span>
+            </div>
+            <span className="text-slate-400 font-mono text-[11px]">PostgreSQL (Row Locks) • Redis Cache • MongoDB Audit</span>
           </div>
-          <span className="text-fintech-subtle font-mono text-[11px]">PostgreSQL (Row Locks) • Redis Cache • MongoDB Audit</span>
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 };
