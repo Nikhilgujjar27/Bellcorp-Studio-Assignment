@@ -50,7 +50,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
   const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   // Withdrawal Form State
-  const [withdrawAmount, setWithdrawAmount] = useState<string>('2000');
+  const [withdrawAmount, setWithdrawAmount] = useState<string>('');
   const [withdrawFeedback, setWithdrawFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   // Concurrency Test State
@@ -174,7 +174,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
     try {
       await atmService.resetDemoState(10000, 50000);
       setResetSuccess(true);
-      setWithdrawAmount('2000');
+      setWithdrawAmount('');
       setWithdrawFeedback(null);
       setConcurrencyReport(null);
       refreshAll();
@@ -234,9 +234,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
             >
               <Zap className="w-4 h-4 text-amber-500 shrink-0" />
               <span>Concurrency Lab</span>
-              <span className="ml-auto text-[10px] font-extrabold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">
-                #2
-              </span>
             </button>
 
             <button
@@ -249,9 +246,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
             >
               <History className="w-4 h-4 text-purple-600 shrink-0" />
               <span>Transactions</span>
-              <span className="ml-auto text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                {transactions.length}
-              </span>
             </button>
 
             <button
@@ -482,6 +476,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
                     <input
                       type="number"
                       min="1"
+                      placeholder="e.g. 2000"
                       value={withdrawAmount}
                       onChange={(e) => {
                         setWithdrawAmount(e.target.value);
@@ -734,15 +729,17 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
                             </td>
                             <td className="py-3.5 pr-3">
                               {isSuccess ? (
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200">
-                                  ● SUCCESS
+                                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-emerald-50 text-emerald-800 border border-emerald-200 whitespace-nowrap shrink-0">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                                  <span>SUCCESS</span>
                                 </span>
                               ) : (
                                 <span
-                                  className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-black bg-rose-50 text-rose-800 border border-rose-200"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black bg-rose-50 text-rose-800 border border-rose-200 whitespace-nowrap shrink-0"
                                   title={tx.failure_reason || ''}
                                 >
-                                  ● FAILED
+                                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                                  <span>FAILED</span>
                                 </span>
                               )}
                             </td>

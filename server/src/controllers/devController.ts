@@ -122,6 +122,9 @@ export class DevController {
         finalBalance === 1000.0 && 
         finalAtmCash === (initialAtmCash - withdrawalAmount);
 
+      // 4. Restore ATM cash back to baseline for the primary demo user session
+      await query('UPDATE atm SET available_cash = $1 WHERE id = $2', [initialAtmCash, atmId]);
+
       return ApiResponse.success(res, {
         accountId,
         accountName: 'Concurrency Sandbox (Account #2)',
