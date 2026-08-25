@@ -1,0 +1,15 @@
+{
+  "name": "atm-simulation",
+  "version": "1.0.0",
+  "description": "Production-grade ATM Simulation with PostgreSQL Concurrency Locking, Redis Caching, and MongoDB Audit Logging",
+  "scripts": {
+    "install:all": "npm install && cd server && npm install && cd ../client && npm install",
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm run dev",
+    "test:server": "cd server && npm test",
+    "seed:server": "cd server && npm run seed"
+  },
+  "keywords": ["atm", "concurrency", "postgresql", "redis", "mongodb", "react", "express"],
+  "author": "",
+  "license": "ISC"
+}
