@@ -60,6 +60,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
   // Reset State
   const [isResetting, setIsResetting] = useState(false);
   const [resetSuccess, setResetSuccess] = useState(false);
+  const [isHeaderSyncing, setIsHeaderSyncing] = useState(false);
+  const [headerSyncToast, setHeaderSyncToast] = useState(false);
+
+  const handleHeaderRefresh = useCallback(() => {
+    setIsHeaderSyncing(true);
+    fetchBalance();
+    fetchAtmStatus();
+    fetchTransactions();
+    setTimeout(() => {
+      setIsHeaderSyncing(false);
+      setHeaderSyncToast(true);
+      setTimeout(() => setHeaderSyncToast(false), 2500);
+    }, 400);
+  }, []);
 
   const fetchBalance = useCallback(async () => {
     setIsLoadingBalance(true);
@@ -308,12 +322,20 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               <div className="text-[11px] font-mono text-slate-500">ID: {user.accountNumber}</div>
             </div>
 
+            {headerSyncToast && (
+              <span className="hidden sm:inline-flex items-center space-x-1 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300 animate-fade-in">
+                <Check className="w-3 h-3 text-emerald-600" />
+                <span>Synced</span>
+              </span>
+            )}
+
             <button
-              onClick={refreshAll}
+              onClick={handleHeaderRefresh}
+              disabled={isHeaderSyncing}
               className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-600 border border-slate-200 transition cursor-pointer"
-              title="Refresh all metrics"
+              title="Refresh all metrics from PostgreSQL and Redis"
             >
-              <RefreshCw className={`w-4 h-4 ${isLoadingBalance || isLoadingAtm || isLoadingTx ? 'animate-spin text-blue-600' : ''}`} />
+              <RefreshCw className={`w-4 h-4 ${isHeaderSyncing || isLoadingBalance || isLoadingAtm || isLoadingTx ? 'animate-spin text-blue-600' : ''}`} />
             </button>
           </div>
         </header>
@@ -575,19 +597,29 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
             </section>
 
             {/* Trigger Action Area */}
-            <section className="flex flex-col items-center justify-center py-6 border-y border-slate-200">
+            <section className="flex flex-col sm:flex-row items-center justify-center gap-3 py-6 border-y border-slate-200">
               <button
                 onClick={handleRunConcurrency}
-                disabled={isRunningConcurrency}
-                className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base sm:text-lg py-4 px-8 rounded-2xl shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
+                disabled={isRunningConcurrency || isResetting}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base sm:text-lg py-3.5 px-7 rounded-2xl shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
               >
                 <Zap className={`w-5 h-5 ${isRunningConcurrency ? 'animate-spin' : ''}`} />
                 <span>{isRunningConcurrency ? 'Executing Parallel Row Locks...' : 'Dispatch 2x ₹2,000 Simultaneous Requests'}</span>
               </button>
-              <p className="mt-2 text-slate-500 text-xs sm:text-sm text-center max-w-2xl font-medium">
-                Fires two parallel HTTP withdrawal requests in the same millisecond to test double-spending protection.
-              </p>
+
+              <button
+                onClick={handleResetDemoState}
+                disabled={isResetting || isRunningConcurrency}
+                className="bg-white hover:bg-slate-50 text-slate-700 border border-slate-300 font-bold text-sm sm:text-base py-3.5 px-5 rounded-2xl shadow-xs active:scale-[0.98] transition-all flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                title="Restore Sandbox Account #2 to ₹3,000 baseline"
+              >
+                <RotateCcw className={`w-4 h-4 ${isResetting ? 'animate-spin' : ''}`} />
+                <span>Reset Sandbox (₹3,000)</span>
+              </button>
             </section>
+            <p className="text-slate-500 text-xs sm:text-sm text-center -mt-3 mb-2 font-medium">
+              Fires two parallel HTTP withdrawal requests in the same millisecond to test double-spending protection.
+            </p>
 
             {/* Real-Time Execution Timeline & Outcome Grid */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -680,13 +712,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               <div className="flex items-center space-x-3">
                 <button
                   onClick={fetchTransactions}
-                  className="px-4 py-2 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs sm:text-sm font-bold flex items-center space-x-2 shadow-sm transition cursor-pointer"
+                  className="px-4 py-2.5 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 text-xs sm:text-sm font-bold flex items-center space-x-2 shadow-xs transition cursor-pointer"
                 >
                   <RefreshCw className={`w-4 h-4 ${isLoadingTx ? 'animate-spin text-blue-600' : ''}`} />
-                  <span>Refresh</span>
-                  <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full text-xs font-bold border border-blue-200">
-                    {transactions.length} items
-                  </span>
+                  <span>Refresh Ledger</span>
                 </button>
               </div>
             </div>
