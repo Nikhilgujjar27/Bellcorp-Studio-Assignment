@@ -57,7 +57,7 @@ class NumberedCanvas(canvas.Canvas):
         self.setLineWidth(0.5)
         self.line(36, 34, 559, 34)
         
-        self.drawString(36, 22, "CONFIDENTIAL • BELLCORP STUDIO ASSIGNMENT SUBMISSION")
+        self.drawString(36, 22, "BELLCORP STUDIO ASSIGNMENT SUBMISSION")
         page_str = f"Page {self._pageNumber} of {page_count}"
         self.drawRightString(559, 22, page_str)
         self.restoreState()
@@ -78,7 +78,7 @@ def build_pdf():
         bottomMargin=44
     )
 
-    # Professional Banking Palette
+    # Professional Palette
     C_PRIMARY = colors.HexColor('#0F172A')   # Slate 900
     C_SECONDARY = colors.HexColor('#1E3A8A') # Blue 900
     C_ACCENT = colors.HexColor('#2563EB')    # Blue 600
@@ -214,7 +214,7 @@ def build_pdf():
         ],
         [
             Paragraph("<b>Assignment:</b> Bellcorp Studio Batch 08", style_td),
-            Paragraph("<b>Verification:</b> 9/9 Automated Tests PASS • Docker Certified • Concurrency Verified", style_td),
+            Paragraph("<b>Verification:</b> 9/9 Automated Tests PASS • Docker Services Verified • Concurrency Verified", style_td),
         ]
     ]
     meta_table = Table(meta_data, colWidths=[180, 343.27])
@@ -232,13 +232,13 @@ def build_pdf():
 
     story.append(Paragraph("1. Problem Understanding & Concurrency Challenge", style_h1))
     story.append(Paragraph(
-        "An Automated Teller Machine (ATM) executes mission-critical financial mutations where account balances "
+        "An Automated Teller Machine (ATM) executes financial transactions where account balances "
         "and physical vault inventory must remain strictly consistent and never become negative under concurrent traffic. "
         "The system supports complete banking workflows: secure PIN authentication, live balance inquiries, cash withdrawals, "
         "immutable transaction history lookup, and vault cash monitoring.",
         style_body
     ))
-    story.append(Paragraph("<b>The Race Condition (Double-Spending Hazard):</b>", style_h2))
+    story.append(Paragraph("<b>Concurrency Race Condition:</b>", style_h2))
     story.append(Paragraph(
         "Consider an account holding <b>₹3,000.00</b> that receives two simultaneous withdrawal requests of "
         "<b>₹2,000.00</b> (Request A and Request B) within the same millisecond:",
@@ -278,7 +278,7 @@ def build_pdf():
         ],
         [
             Paragraph("<b>Audit Store</b><br/>MongoDB 6.0 (Docker)", style_td),
-            Paragraph("Immutable compliance audit trail capturing structured activity events (<code>WITHDRAWAL_SUCCESS</code>, <code>WITHDRAWAL_FAILED</code>, etc.).", style_td),
+            Paragraph("Audit event store capturing asynchronous activity and compliance events (<code>WITHDRAWAL_SUCCESS</code>, <code>WITHDRAWAL_FAILED</code>, etc.).", style_td),
             Paragraph("Asynchronous, non-blocking post-commit emission. MongoDB failure never rolls back committed financial transactions.", style_td)
         ],
     ]
@@ -526,7 +526,7 @@ def build_pdf():
     story.append(Paragraph("8. Redis Caching & Rate Limiting Strategy", style_h1))
     story.append(Paragraph(
         "<b>Cache-Aside Flow:</b> Balance inquiries check Redis key <code>atm:balance:&lt;id&gt;</code> first. "
-        "Cache hits return in sub-5ms. Cache misses query PostgreSQL and populate Redis with a 60-second TTL. "
+        "Cache hits return directly from Redis without querying PostgreSQL. Cache misses query PostgreSQL and populate Redis with a 60-second TTL. "
         "Upon successful cash withdrawal, Redis cache is invalidated immediately via <code>DEL</code>. "
         "A sliding-window rate limiter restricts <code>POST /api/withdraw</code> to 10 requests/minute. "
         "<i>Fault Behavior:</i> If Redis is offline, balance reads transparently query PostgreSQL directly, "
@@ -678,7 +678,7 @@ def build_pdf():
 
     story.append(Paragraph("14. Testing & Runtime Verification Results", style_h1))
     story.append(Paragraph(
-        "The system has undergone rigorous automated testing, container health audits, and live runtime verification against real Docker services:",
+        "The system has undergone automated testing, container health audits, and live runtime verification against real Docker services:",
         style_body
     ))
 
@@ -704,8 +704,8 @@ def build_pdf():
         ],
         [
             Paragraph("<b>Overdraft Rejection</b>", style_td),
-            Paragraph("Withdraw ₹15,000 on Account #1 (₹9,000 balance)", style_td),
-            Paragraph("HTTP 409 INSUFFICIENT_BALANCE; balance preserved at ₹9,000; FAILED ledger row inserted.", style_td),
+            Paragraph("Withdraw ₹11,000 on Account #1 (₹10,000 balance)", style_td),
+            Paragraph("HTTP 409 INSUFFICIENT_BALANCE; balance preserved at ₹10,000; FAILED ledger row inserted.", style_td),
             Paragraph("<b>PASS</b>", style_td_bold)
         ],
         [
