@@ -1,6 +1,9 @@
 version: '3.8'
 
 services:
+  # -------------------------------------------------------------
+  # 1. Primary PostgreSQL 15 Database (Transactional Core)
+  # -------------------------------------------------------------
   postgres:
     image: postgres:15-alpine
     container_name: atm_postgres
@@ -18,7 +21,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - atm_network
 
+  # -------------------------------------------------------------
+  # 2. Secondary MongoDB 6.0 Database (Audit Logs)
+  # -------------------------------------------------------------
   mongodb:
     image: mongo:6.0
     container_name: atm_mongodb
@@ -32,7 +40,12 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - atm_network
 
+  # -------------------------------------------------------------
+  # 3. Redis 7 Cache & Rate Limiting Engine
+  # -------------------------------------------------------------
   redis:
     image: redis:7-alpine
     container_name: atm_redis
@@ -46,8 +59,60 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - atm_network
+
+  # -------------------------------------------------------------
+  # 4. Backend Express API Gateway
+  # -------------------------------------------------------------
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: atm_api
+    restart: always
+    environment:
+      PORT: 5000
+      NODE_ENV: production
+      DATABASE_URL: postgres://postgres:postgrespassword@postgres:5432/atm_db
+      MONGODB_URI: mongodb://mongodb:27017/atm_audit
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: supersecret_jwt_key_bellcorp_studio_batch08
+      RATE_LIMIT_MAX_REQUESTS: 10
+      RATE_LIMIT_WINDOW_SECONDS: 60
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mongodb:
+        condition: service_healthy
+    networks:
+      - atm_network
+
+  # -------------------------------------------------------------
+  # 5. Frontend React + Vite + Nginx Web Application
+  # -------------------------------------------------------------
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: atm_client
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    networks:
+      - atm_network
 
 volumes:
   postgres_data:
   mongo_data:
   redis_data:
+
+networks:
+  atm_network:
+    driver: bridge
