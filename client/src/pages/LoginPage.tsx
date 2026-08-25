@@ -42,17 +42,20 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
       <div className="max-w-md w-full my-auto">
         {/* Brand Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex p-3.5 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 mb-3.5 shadow-sm">
-            <ShieldCheck className="w-9 h-9" />
+          <div className="inline-flex p-3 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 mb-3 shadow-sm">
+            <ShieldCheck className="w-8 h-8" />
           </div>
-          <div className="flex items-center justify-center space-x-2.5">
-            <span className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">ATM Simulation</span>
-            <span className="text-xs font-black bg-blue-100 text-blue-700 border border-blue-200 px-3 py-0.5 rounded-full whitespace-nowrap">
-              Bellcorp Studio
+          <div className="mb-2.5">
+            <span className="inline-flex items-center text-xs font-bold bg-blue-100 text-blue-700 border border-blue-200 px-3 py-0.5 rounded-full">
+              Bellcorp Studio • Batch 08
             </span>
           </div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 mt-2">ATM Simulation Application</h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">Bellcorp Studio Engineering Assignment • PIN Verification</p>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            ATM Simulation Application
+          </h1>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+            Enter your account credentials to begin your secure session
+          </p>
         </div>
 
         {/* Elevated Authentication Card */}
