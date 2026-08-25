@@ -624,68 +624,150 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
             {/* Real-Time Execution Timeline & Outcome Grid */}
             <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {/* Request A Card */}
-              <div className="bg-white rounded-2xl p-6 border-l-4 border-l-emerald-500 shadow-sm relative overflow-hidden border border-slate-200">
-                <div className="absolute top-0 right-0 bg-emerald-50 text-emerald-700 font-bold text-xs px-3 py-1 rounded-bl-lg">
+              <div
+                className={`bg-white rounded-2xl p-6 border-l-4 shadow-sm relative overflow-hidden border transition-all ${
+                  concurrencyReport
+                    ? 'border-l-emerald-500 border-slate-200 bg-emerald-50/20'
+                    : 'border-l-slate-300 border-slate-200'
+                }`}
+              >
+                <div
+                  className={`absolute top-0 right-0 font-bold text-xs px-3 py-1 rounded-bl-lg ${
+                    concurrencyReport
+                      ? 'bg-emerald-50 text-emerald-700'
+                      : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
                   Thread 1
                 </div>
-                <div className="flex items-center gap-2 mb-4 text-emerald-600">
-                  <CheckCircle2 className="w-5 h-5" />
+
+                <div className="flex items-center gap-2 mb-4 text-slate-800">
+                  {concurrencyReport ? (
+                    <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-[10px] font-bold text-slate-400">1</div>
+                  )}
                   <h3 className="font-extrabold text-lg text-slate-900">Request A</h3>
                 </div>
-                <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                    <span>Status: {concurrencyReport ? `${concurrencyReport.requests.requestA.httpStatus} OK` : '200 OK'}</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                    <span>Withdrew ₹2,000.00</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                    <span>Row Lock Acquired</span>
-                  </li>
-                </ul>
+
+                {concurrencyReport ? (
+                  <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span className="font-bold text-emerald-800">Status: {concurrencyReport.requests.requestA.httpStatus} OK</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span>Withdrew ₹2,000.00</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      <span>Row Lock Acquired</span>
+                    </li>
+                  </ul>
+                ) : (
+                  <div className="space-y-2 text-xs sm:text-sm text-slate-500">
+                    <div className="flex items-center justify-between">
+                      <span>Target Amount:</span>
+                      <span className="font-bold text-slate-900 font-mono">₹2,000.00</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Lock Mechanism:</span>
+                      <span className="font-mono text-blue-700 font-semibold">SELECT FOR UPDATE</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 italic pt-1 border-t border-slate-100">
+                      Standby • Ready for parallel dispatch
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Request B Card */}
-              <div className="bg-white rounded-2xl p-6 border-l-4 border-l-rose-500 shadow-sm relative overflow-hidden border border-slate-200">
-                <div className="absolute top-0 right-0 bg-rose-50 text-rose-700 font-bold text-xs px-3 py-1 rounded-bl-lg">
+              <div
+                className={`bg-white rounded-2xl p-6 border-l-4 shadow-sm relative overflow-hidden border transition-all ${
+                  concurrencyReport
+                    ? 'border-l-rose-500 border-slate-200 bg-rose-50/20'
+                    : 'border-l-slate-300 border-slate-200'
+                }`}
+              >
+                <div
+                  className={`absolute top-0 right-0 font-bold text-xs px-3 py-1 rounded-bl-lg ${
+                    concurrencyReport
+                      ? 'bg-rose-50 text-rose-700'
+                      : 'bg-slate-100 text-slate-500'
+                  }`}
+                >
                   Thread 2
                 </div>
-                <div className="flex items-center gap-2 mb-4 text-rose-600">
-                  <XCircle className="w-5 h-5" />
+
+                <div className="flex items-center gap-2 mb-4 text-slate-800">
+                  {concurrencyReport ? (
+                    <XCircle className="w-5 h-5 text-rose-600" />
+                  ) : (
+                    <div className="w-5 h-5 rounded-full border-2 border-slate-300 flex items-center justify-center text-[10px] font-bold text-slate-400">2</div>
+                  )}
                   <h3 className="font-extrabold text-lg text-slate-900">Request B</h3>
                 </div>
-                <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                    <span>Status: {concurrencyReport ? `${concurrencyReport.requests.requestB.httpStatus} Conflict` : '409 Conflict'}</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                    <span>Blocked then Rejected</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                    <span>(Insufficient Funds)</span>
-                  </li>
-                </ul>
+
+                {concurrencyReport ? (
+                  <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                      <span className="font-bold text-rose-800">Status: {concurrencyReport.requests.requestB.httpStatus} Conflict</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                      <span>Blocked then Rejected</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                      <span>(Insufficient Funds)</span>
+                    </li>
+                  </ul>
+                ) : (
+                  <div className="space-y-2 text-xs sm:text-sm text-slate-500">
+                    <div className="flex items-center justify-between">
+                      <span>Target Amount:</span>
+                      <span className="font-bold text-slate-900 font-mono">₹2,000.00</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span>Lock Mechanism:</span>
+                      <span className="font-mono text-blue-700 font-semibold">SELECT FOR UPDATE</span>
+                    </div>
+                    <div className="text-[11px] text-slate-400 italic pt-1 border-t border-slate-100">
+                      Standby • Ready for parallel dispatch
+                    </div>
+                  </div>
+                )}
               </div>
             </section>
 
             {/* Final Outcome Summary Box */}
             <section className="bg-slate-100/70 rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center shadow-sm border border-slate-200">
-              <div className="bg-emerald-100 text-emerald-900 font-extrabold text-base sm:text-lg px-6 sm:px-8 py-3.5 rounded-2xl flex items-center justify-center gap-2 border border-emerald-300 shadow-xs mb-2">
-                <ShieldCheck className="w-6 h-6 text-emerald-700 shrink-0" />
-                <span>
-                  Final Balance: ₹{concurrencyReport ? concurrencyReport.finalBalance.toLocaleString('en-IN') : '1,000'}.00 (Strictly Preserved • 0 Overdraft)
-                </span>
-              </div>
-              <p className="text-slate-600 text-xs sm:text-sm flex items-center gap-1.5 font-semibold">
-                <Info className="w-4 h-4 text-slate-500" />
-                <span>Account #1 (Demo User) remained 100% isolated and untouched</span>
-              </p>
+              {concurrencyReport ? (
+                <>
+                  <div className="bg-emerald-100 text-emerald-900 font-extrabold text-base sm:text-lg px-6 sm:px-8 py-3.5 rounded-2xl flex items-center justify-center gap-2 border border-emerald-300 shadow-xs mb-2">
+                    <ShieldCheck className="w-6 h-6 text-emerald-700 shrink-0" />
+                    <span>
+                      Final Balance: ₹{concurrencyReport.finalBalance.toLocaleString('en-IN')}.00 (Strictly Preserved • 0 Overdraft)
+                    </span>
+                  </div>
+                  <p className="text-slate-600 text-xs sm:text-sm flex items-center gap-1.5 font-semibold">
+                    <Info className="w-4 h-4 text-slate-500" />
+                    <span>Account #1 (Demo User) remained 100% isolated and untouched • Execution Duration: {concurrencyReport.durationMs}ms</span>
+                  </p>
+                </>
+              ) : (
+                <div className="space-y-1 py-1">
+                  <div className="font-bold text-slate-800 text-sm sm:text-base flex items-center justify-center gap-2">
+                    <FlaskConical className="w-4 h-4 text-blue-600" />
+                    <span>Sandbox Account #2 is primed at ₹3,000.00</span>
+                  </div>
+                  <p className="text-xs text-slate-500">
+                    Click "Dispatch 2x ₹2,000 Simultaneous Requests" above to execute the real parallel database stress test.
+                  </p>
+                </div>
+              )}
             </section>
           </div>
         )}
