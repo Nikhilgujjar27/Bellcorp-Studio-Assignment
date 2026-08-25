@@ -7,7 +7,7 @@ const API_BASE = 'http://localhost:5000';
 
 async function runFullVerification() {
   console.log('================================================================');
-  console.log('       APEXBANK ATM SIMULATION — RUNTIME VERIFICATION SUITE     ');
+  console.log('   BELLCORP STUDIO ATM SIMULATION — RUNTIME VERIFICATION SUITE  ');
   console.log('================================================================\n');
 
   const pg = new Pool({ connectionString: config.databaseUrl });

@@ -47,7 +47,7 @@ class NumberedCanvas(canvas.Canvas):
 
         # Running Header (on pages after page 1)
         if self._pageNumber > 1:
-            self.drawString(36, 810, "ApexBank ATM Simulation • System Design & Architecture Specification")
+            self.drawString(36, 810, "Bellcorp Studio • ATM Simulation Application — System Design Document")
             self.setStrokeColor(colors.HexColor('#CBD5E1'))
             self.setLineWidth(0.5)
             self.line(36, 804, 559, 804)
@@ -66,7 +66,7 @@ class NumberedCanvas(canvas.Canvas):
 # 3. Document Builder
 # ----------------------------------------------------------------------
 def build_pdf():
-    pdf_filename = "ApexBank_ATM_Design_Document.pdf"
+    pdf_filename = "Bellcorp_ATM_Design_Document.pdf"
     
     # Printable area: A4 is 595.27 x 841.89 pt. Margin: 36pt (width = 523.27 pt)
     doc = SimpleDocTemplate(
@@ -204,16 +204,16 @@ def build_pdf():
     # ==================================================================
     # PAGE 1: TITLE, METADATA, PROBLEM UNDERSTANDING, HLD
     # ==================================================================
-    story.append(Paragraph("ApexBank ATM Simulation System", style_doc_title))
-    story.append(Paragraph("System Architecture, ACID Concurrency Control & Production Engineering Specification", style_doc_subtitle))
+    story.append(Paragraph("Bellcorp Studio — ATM Simulation Application", style_doc_title))
+    story.append(Paragraph("System Design Document • ACID Concurrency Control & Engineering Specification", style_doc_subtitle))
     
     meta_data = [
         [
-            Paragraph("<b>Project:</b> ApexBank ATM Simulation", style_td),
+            Paragraph("<b>Application:</b> ATM Simulation Application", style_td),
             Paragraph("<b>Stack:</b> React 18 • Node/Express (TS) • PostgreSQL 15 • Redis 7 • MongoDB 6.0", style_td),
         ],
         [
-            Paragraph("<b>Specification:</b> Bellcorp Studio Assignment", style_td),
+            Paragraph("<b>Assignment:</b> Bellcorp Studio Batch 08", style_td),
             Paragraph("<b>Verification:</b> 9/9 Automated Tests PASS • Docker Certified • Concurrency Verified", style_td),
         ]
     ]

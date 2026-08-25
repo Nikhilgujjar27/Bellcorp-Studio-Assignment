@@ -18,12 +18,12 @@ export const Navbar: React.FC<NavbarProps> = ({ user, onLogout }) => {
           </div>
           <div>
             <div className="flex items-center space-x-2.5">
-              <span className="font-extrabold text-xl text-slate-900 tracking-tight">ApexBank</span>
+              <span className="font-extrabold text-xl text-slate-900 tracking-tight">ATM Simulation</span>
               <span className="text-xs font-extrabold bg-blue-100 text-blue-700 border border-blue-200 px-2.5 py-0.5 rounded-full">
-                ATM Terminal
+                Bellcorp Studio
               </span>
             </div>
-            <p className="text-xs text-slate-500 hidden sm:block font-medium">Concurrency-Safe Financial Engine</p>
+            <p className="text-xs text-slate-500 hidden sm:block font-medium">Batch 08 Engineering Assignment</p>
           </div>
         </div>
 

@@ -46,13 +46,13 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             <ShieldCheck className="w-9 h-9" />
           </div>
           <div className="flex items-center justify-center space-x-2.5">
-            <span className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">ApexBank</span>
+            <span className="font-extrabold text-2xl sm:text-3xl text-slate-900 tracking-tight">ATM Simulation</span>
             <span className="text-xs font-black bg-blue-100 text-blue-700 border border-blue-200 px-3 py-0.5 rounded-full whitespace-nowrap">
-              ATM Terminal
+              Bellcorp Studio
             </span>
           </div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 mt-2">Secure ATM Terminal</h1>
-          <p className="text-xs sm:text-sm text-slate-500 font-medium">Access your account securely with PIN verification</p>
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 mt-2">ATM Simulation Application</h1>
+          <p className="text-xs sm:text-sm text-slate-500 font-medium">Bellcorp Studio Engineering Assignment • PIN Verification</p>
         </div>
 
         {/* Elevated Authentication Card */}

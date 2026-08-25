@@ -1,6 +1,8 @@
-# System Design Document: Concurrency-Safe ATM Simulation
+# Bellcorp Studio — ATM Simulation Application
+## System Design Document
 
----
+**Application:** ATM Simulation Application  
+**Assignment:** Bellcorp Studio Batch 08 — Engineering Assignment  
 
 ## 1. Problem Understanding & Concurrency Challenge
 

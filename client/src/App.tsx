@@ -23,7 +23,7 @@ export const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 font-semibold">
           <div className="flex items-center space-x-2">
             <span className="h-2 w-2 rounded-full bg-fintech-green"></span>
-            <span>ApexBank ATM Terminal System • Concurrency-Safe Financial Engine</span>
+            <span>ATM Simulation System • Bellcorp Studio</span>
           </div>
           <span className="text-fintech-subtle font-mono text-[11px]">PostgreSQL (Row Locks) • Redis Cache • MongoDB Audit</span>
         </div>

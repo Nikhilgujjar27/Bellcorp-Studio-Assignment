@@ -1,6 +1,6 @@
-# Concurrency-Safe ATM Simulation System
+# Bellcorp Studio — ATM Simulation Application
 
-A production-grade ATM Simulation full-stack application engineered with strict financial correctness, ACID concurrency safety using PostgreSQL row-level locks (`SELECT ... FOR UPDATE`), Redis balance caching and rate limiting, MongoDB audit logging, and a responsive React + Vite frontend.
+ATM Simulation Application developed for the Bellcorp Studio Batch 08 engineering assignment. Engineered with strict financial correctness, ACID concurrency safety using PostgreSQL row-level locks (`SELECT ... FOR UPDATE`), Redis balance caching and rate limiting, MongoDB audit logging, and a responsive React + Vite frontend.
 
 ---
 
