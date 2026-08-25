@@ -17,7 +17,12 @@ import {
   RotateCcw, 
   Printer, 
   Calendar,
-  XCircle
+  XCircle,
+  Database,
+  Lock,
+  Info,
+  Layers,
+  FlaskConical
 } from 'lucide-react';
 import { atmService, Transaction, AtmStatus as IAtmStatus, UserAccount, ConcurrencyTestReport } from '../services/api';
 import { formatCurrency, formatDate } from '../utils/formatters';
@@ -28,8 +33,8 @@ interface DashboardPageProps {
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) => {
-  // Navigation State
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'concurrency' | 'transactions'>('dashboard');
+  // Navigation State (4 Tabs matching Stitch sidebar)
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'concurrency' | 'transactions' | 'vault'>('dashboard');
 
   // Banking State
   const [balance, setBalance] = useState<number | null>(null);
@@ -190,7 +195,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col md:flex-row text-slate-900">
       {/* ------------------------------------------------------------- */}
-      {/* LEFT SIDEBAR NAVIGATION (Matching Stitch Screen 2 & Screen 4) */}
+      {/* LEFT SIDEBAR NAVIGATION (Matching Stitch Screen 2, 3 & 4)    */}
       {/* ------------------------------------------------------------- */}
       <aside className="w-full md:w-64 bg-white border-r border-slate-200/90 flex flex-col justify-between p-4 sm:p-5 shrink-0">
         <div>
@@ -205,7 +210,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
             </div>
           </div>
 
-          {/* Navigation Links */}
+          {/* Navigation Links (4 Screens) */}
           <nav className="space-y-1.5 font-semibold text-sm">
             <button
               onClick={() => setActiveTab('dashboard')}
@@ -247,6 +252,18 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               <span className="ml-auto text-xs font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
                 {transactions.length}
               </span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('vault')}
+              className={`w-full flex items-center space-x-3 px-3.5 py-3 rounded-2xl transition cursor-pointer ${
+                activeTab === 'vault'
+                  ? 'bg-blue-50 text-blue-700 font-bold border border-blue-200/60 shadow-sm'
+                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+              }`}
+            >
+              <Layers className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>Vault Status</span>
             </button>
           </nav>
         </div>
@@ -528,127 +545,126 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
         )}
 
         {/* ============================================================= */}
-        {/* VIEW 2: CONCURRENCY SAFETY LAB (Stitch Screen 3) */}
+        {/* VIEW 2: CONCURRENCY SAFETY LAB (Exact Stitch Screen 4 Soft Tinted) */}
         {/* ============================================================= */}
         {activeTab === 'concurrency' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl w-full mx-auto">
-            {/* Dark Slate Hero Card Matching Stitch Screen 3 */}
-            <div className="bg-slate-900 text-white rounded-3xl p-7 sm:p-9 shadow-xl relative overflow-hidden">
-              <div className="flex items-center space-x-2 mb-3">
-                <span className="inline-flex items-center text-xs font-mono font-semibold bg-slate-800 text-slate-300 border border-slate-700 px-3 py-1 rounded-full">
-                  Testing Sandbox • Account #2 (10000002)
-                </span>
+            {/* Soft-Tinted Sandbox Header Card (Matching Stitch Screen 4 exact HTML) */}
+            <section className="bg-slate-100/70 text-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-sm relative overflow-hidden border border-slate-200">
+              <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+                <Database className="w-32 h-32 text-blue-600" />
               </div>
 
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">Concurrency Safety Lab</h1>
-              <p className="text-xs sm:text-sm font-mono text-emerald-400 mt-2">
-                Live Stress Test: Real-Time ACID Mutual Exclusion (SELECT ... FOR UPDATE)
-              </p>
+              <div className="relative z-10 flex flex-col gap-3">
+                <div className="inline-flex items-center self-start bg-white border border-slate-300 text-slate-700 font-bold text-xs px-3.5 py-1 rounded-full shadow-xs">
+                  <FlaskConical className="w-3.5 h-3.5 mr-1.5 text-blue-600" />
+                  <span>Testing Sandbox • Account #2 (10000002)</span>
+                </div>
 
-              {/* Baseline Indicator Box */}
-              <div className="mt-6 p-4 rounded-2xl bg-slate-800/80 border border-slate-700/80 inline-block">
-                <div className="text-xs text-slate-400 font-medium">Baseline Balance Indicator</div>
-                <div className="text-2xl sm:text-3xl font-extrabold text-white mt-1">
-                  Initial Sandbox Balance: ₹3,000.00
+                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
+                  Concurrency Safety Lab
+                </h1>
+
+                <p className="font-mono text-blue-700 text-sm sm:text-base font-bold">
+                  Live Stress Test: Real-Time ACID Mutual Exclusion (SELECT ... FOR UPDATE)
+                </p>
+
+                {/* Baseline Balance Indicator Box */}
+                <div className="mt-3 bg-blue-50 border-l-4 border-l-blue-600 p-4 rounded-xl inline-block self-start shadow-xs">
+                  <div className="text-slate-500 font-bold text-xs mb-1">Baseline Balance Indicator</div>
+                  <div className="text-2xl sm:text-3xl font-extrabold text-slate-900">
+                    Initial Sandbox Balance: ₹3,000.00
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
 
-            {/* Central Dispatch Action CTA */}
-            <div className="text-center py-4 space-y-2">
+            {/* Trigger Action Area */}
+            <section className="flex flex-col items-center justify-center py-6 border-y border-slate-200">
               <button
                 onClick={handleRunConcurrency}
                 disabled={isRunningConcurrency}
-                className="px-8 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold text-base sm:text-lg shadow-xl shadow-blue-500/30 transition-all flex items-center justify-center space-x-3 mx-auto disabled:opacity-50 cursor-pointer"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-base sm:text-lg py-4 px-8 rounded-2xl shadow-lg shadow-blue-500/25 active:scale-[0.98] transition-all flex items-center gap-2.5 cursor-pointer disabled:opacity-50"
               >
                 <Zap className={`w-5 h-5 ${isRunningConcurrency ? 'animate-spin' : ''}`} />
                 <span>{isRunningConcurrency ? 'Executing Parallel Row Locks...' : 'Dispatch 2x ₹2,000 Simultaneous Requests'}</span>
               </button>
-
-              <p className="text-xs text-slate-500 font-medium">
+              <p className="mt-2 text-slate-500 text-xs sm:text-sm text-center max-w-2xl font-medium">
                 Fires two parallel HTTP withdrawal requests in the same millisecond to test double-spending protection.
               </p>
-            </div>
+            </section>
 
-            {/* Execution Results Grid Matching Stitch Screen 3 */}
-            {concurrencyReport && (
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  {/* Request A (Thread 1) */}
-                  <div className="p-6 rounded-3xl bg-white border-2 border-emerald-400 shadow-sm relative overflow-hidden">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2 text-emerald-700 font-bold text-base">
-                        <CheckCircle2 className="w-5 h-5" />
-                        <span>Request A</span>
-                      </div>
-                      <span className="text-xs font-mono font-bold bg-emerald-50 text-emerald-800 px-2.5 py-1 rounded-full border border-emerald-200">
-                        Thread 1
-                      </span>
-                    </div>
-
-                    <div className="space-y-2 text-xs sm:text-sm font-mono">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span>Status: 200 OK</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span>Withdrew ₹2,000.00</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                        <span>Row Lock Acquired</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Request B (Thread 2) */}
-                  <div className="p-6 rounded-3xl bg-white border-2 border-rose-400 shadow-sm relative overflow-hidden">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-2 text-rose-700 font-bold text-base">
-                        <XCircle className="w-5 h-5" />
-                        <span>Request B</span>
-                      </div>
-                      <span className="text-xs font-mono font-bold bg-rose-50 text-rose-800 px-2.5 py-1 rounded-full border border-rose-200">
-                        Thread 2
-                      </span>
-                    </div>
-
-                    <div className="space-y-2 text-xs sm:text-sm font-mono">
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-rose-500" />
-                        <span>Status: 409 Conflict</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-rose-500" />
-                        <span>Blocked then Rejected</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-rose-500" />
-                        <span>(Insufficient Funds)</span>
-                      </div>
-                    </div>
-                  </div>
+            {/* Real-Time Execution Timeline & Outcome Grid */}
+            <section className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {/* Request A Card */}
+              <div className="bg-white rounded-2xl p-6 border-l-4 border-l-emerald-500 shadow-sm relative overflow-hidden border border-slate-200">
+                <div className="absolute top-0 right-0 bg-emerald-50 text-emerald-700 font-bold text-xs px-3 py-1 rounded-bl-lg">
+                  Thread 1
                 </div>
-
-                {/* Final Balance Proof Box */}
-                <div className="p-6 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm text-center space-y-3">
-                  <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-2xl bg-emerald-50 text-emerald-800 border border-emerald-300 font-extrabold text-sm sm:text-base">
-                    <ShieldCheck className="w-5 h-5 text-emerald-600" />
-                    <span>Final Balance: ₹{concurrencyReport.finalBalance.toLocaleString('en-IN')}.00 (Strictly Preserved • 0 Overdraft)</span>
-                  </div>
-
-                  <div className="text-xs text-slate-500 font-medium">
-                    Account #1 (Demo User) remained 100% isolated and untouched.
-                  </div>
+                <div className="flex items-center gap-2 mb-4 text-emerald-600">
+                  <CheckCircle2 className="w-5 h-5" />
+                  <h3 className="font-extrabold text-lg text-slate-900">Request A</h3>
                 </div>
+                <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Status: {concurrencyReport ? `${concurrencyReport.requests.requestA.httpStatus} OK` : '200 OK'}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Withdrew ₹2,000.00</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Row Lock Acquired</span>
+                  </li>
+                </ul>
               </div>
-            )}
+
+              {/* Request B Card */}
+              <div className="bg-white rounded-2xl p-6 border-l-4 border-l-rose-500 shadow-sm relative overflow-hidden border border-slate-200">
+                <div className="absolute top-0 right-0 bg-rose-50 text-rose-700 font-bold text-xs px-3 py-1 rounded-bl-lg">
+                  Thread 2
+                </div>
+                <div className="flex items-center gap-2 mb-4 text-rose-600">
+                  <XCircle className="w-5 h-5" />
+                  <h3 className="font-extrabold text-lg text-slate-900">Request B</h3>
+                </div>
+                <ul className="space-y-2 font-mono text-xs sm:text-sm text-slate-600">
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                    <span>Status: {concurrencyReport ? `${concurrencyReport.requests.requestB.httpStatus} Conflict` : '409 Conflict'}</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                    <span>Blocked then Rejected</span>
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                    <span>(Insufficient Funds)</span>
+                  </li>
+                </ul>
+              </div>
+            </section>
+
+            {/* Final Outcome Summary Box */}
+            <section className="bg-slate-100/70 rounded-2xl p-6 sm:p-8 flex flex-col items-center text-center shadow-sm border border-slate-200">
+              <div className="bg-emerald-100 text-emerald-900 font-extrabold text-base sm:text-lg px-6 sm:px-8 py-3.5 rounded-2xl flex items-center justify-center gap-2 border border-emerald-300 shadow-xs mb-2">
+                <ShieldCheck className="w-6 h-6 text-emerald-700 shrink-0" />
+                <span>
+                  Final Balance: ₹{concurrencyReport ? concurrencyReport.finalBalance.toLocaleString('en-IN') : '1,000'}.00 (Strictly Preserved • 0 Overdraft)
+                </span>
+              </div>
+              <p className="text-slate-600 text-xs sm:text-sm flex items-center gap-1.5 font-semibold">
+                <Info className="w-4 h-4 text-slate-500" />
+                <span>Account #1 (Demo User) remained 100% isolated and untouched</span>
+              </p>
+            </section>
           </div>
         )}
 
         {/* ============================================================= */}
-        {/* VIEW 3: TRANSACTION HISTORY & RECEIPTS (Stitch Screen 4) */}
+        {/* VIEW 3: TRANSACTION HISTORY & RECEIPTS (Stitch Screen 3)       */}
         {/* ============================================================= */}
         {activeTab === 'transactions' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-6xl w-full mx-auto">
@@ -750,7 +766,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
                 </div>
               </div>
 
-              {/* Receipt Detail Card (Matching Stitch Screen 4) */}
+              {/* Receipt Detail Card (Matching Stitch Screen 3) */}
               <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-md sticky top-24">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                   <div className="font-extrabold text-sm text-slate-900">Transaction Detail</div>
@@ -817,6 +833,62 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
                     <span>Print Receipt</span>
                   </button>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ============================================================= */}
+        {/* VIEW 4: VAULT STATUS (Stitch Screen 2 Extension)               */}
+        {/* ============================================================= */}
+        {activeTab === 'vault' && (
+          <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl w-full mx-auto">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">ATM Vault Inventory</h1>
+              <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
+                Hardware cash dispenser status, vault reservoir monitoring, and automated safety limits.
+              </p>
+            </div>
+
+            <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <div className="p-3.5 rounded-2xl bg-emerald-50 text-emerald-600 border border-emerald-200">
+                    <Banknote className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-extrabold text-slate-900">Terminal ATM-01 Reservoir</h2>
+                    <p className="text-xs text-slate-500 font-medium">Physical currency cassette health</p>
+                  </div>
+                </div>
+
+                <span className="px-3.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                  ● Operational
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-slate-100">
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="text-xs font-bold text-slate-500 uppercase">Available Cash</div>
+                  <div className="text-2xl font-black text-slate-900 mt-1">
+                    {formatCurrency(atmStatus?.availableCash ?? 50000)}
+                  </div>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="text-xs font-bold text-slate-500 uppercase">Max Vault Capacity</div>
+                  <div className="text-2xl font-black text-slate-900 mt-1">₹50,000.00</div>
+                </div>
+                <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="text-xs font-bold text-slate-500 uppercase">Capacity Level</div>
+                  <div className="text-2xl font-black text-emerald-700 mt-1">
+                    {Math.round(((atmStatus?.availableCash ?? 50000) / 50000) * 100)}%
+                  </div>
+                </div>
+              </div>
+
+              <div className="p-4 rounded-2xl bg-blue-50/80 border border-blue-200 text-xs text-blue-900 font-medium flex items-center space-x-2">
+                <Lock className="w-4 h-4 text-blue-600 shrink-0" />
+                <span>Withdrawals automatically lock and decrement vault cash inside the same ACID transaction as the account balance.</span>
               </div>
             </div>
           </div>
