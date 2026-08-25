@@ -1,0 +1,328 @@
+<!DOCTYPE html><html class="light" lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Bellcorp Studio - ATM Simulation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#003ea8",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed": "#dae2fd",
+                        "outline": "#737686",
+                        "on-secondary-fixed-variant": "#3f465c",
+                        "on-secondary-fixed": "#131b2e",
+                        "secondary": "#565e74",
+                        "outline-variant": "#c3c6d7",
+                        "surface-tint": "#0053db",
+                        "tertiary-fixed-dim": "#c1c7cf",
+                        "on-tertiary-fixed": "#161c22",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b4c5ff",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#dae2fd",
+                        "surface-container": "#eceef0",
+                        "background": "#f7f9fb",
+                        "surface-bright": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary": "#4f565c",
+                        "primary": "#004ac6",
+                        "on-tertiary-fixed-variant": "#41474e",
+                        "error": "#ba1a1a",
+                        "surface": "#f7f9fb",
+                        "on-surface-variant": "#434655",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "on-surface": "#191c1e",
+                        "on-secondary-container": "#5c647a",
+                        "on-primary-container": "#eeefff",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-fixed": "#dde3eb",
+                        "error-container": "#ffdad6",
+                        "primary-container": "#2563eb",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "inverse-on-surface": "#eff1f3",
+                        "on-tertiary-container": "#ebf1f9",
+                        "surface-container-highest": "#e0e3e5",
+                        "tertiary-container": "#676e75",
+                        "surface-dim": "#d8dadc",
+                        "primary-fixed": "#dbe1ff",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "lg": "48px",
+                        "sm": "12px",
+                        "base": "8px",
+                        "container-max": "1200px",
+                        "xs": "4px",
+                        "md": "24px",
+                        "xl": "64px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "numeric-lg": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-display": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    },
+                    "fontSize": {
+                        "numeric-lg": ["36px", { "lineHeight": "1", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md">
+<!-- Top Navigation (Generated from JSON style instructions) -->
+<header class="bg-surface-container-highest flex justify-between items-center px-gutter w-full h-16 shadow-sm z-50 fixed w-full top-0">
+<div class="flex items-center gap-md">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">atm</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">Bellcorp Studio Terminal</span>
+</div>
+<div class="hidden md:flex items-center gap-sm bg-surface-container-low px-3 py-1 rounded-full border border-outline-variant">
+<div class="w-2 h-2 rounded-full bg-[#059669] animate-pulse"></div>
+<span class="font-label-md text-label-md text-on-surface-variant">System Operational</span>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex flex-col items-end mr-sm">
+<span class="font-label-md text-label-md text-on-surface">Demo User</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">ID: 10000001</span>
+</div>
+<div class="flex items-center gap-xs">
+<button class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors group relative" title="sensors">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">sensors</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors group relative" title="settings">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">settings</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-variant text-on-surface-variant transition-colors group relative" title="help">
+<span class="material-symbols-outlined group-hover:text-primary transition-colors">help</span>
+</button>
+<img alt="Terminal Operator" class="w-10 h-10 rounded-full border-2 border-surface-container-highest ml-sm object-cover" data-alt="A small, professional headshot of an anonymous corporate user in a light blue minimalist setting, soft even lighting, modern clean corporate aesthetic, representing a dummy system operator profile picture." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5K_8N7ZrYKzgcYj_gyKz4oKWVpn2IZqXM-MeYOg_0kpNYDPmHFN-Hj6XzHmw8byxHylSG4h0FPHtQ3tvFI_dVADenopCJTniEVLvb6cuDe2MF_lBXh0yAlTUCb0UaC_K0klNSJinTH4qUaBuaFR-xxQm3IuUinjEY_eL1NjjbSdzwTc_-I8eDUkqv5Y_Xjg_qyxSQGbsaN54aQd_V3oZa9gX0LIMcj0iwQiTQmPh_Xh_7H7w7cN_DqQDABhuQcmC5VNtH3nttmsAR">
+<button class="ml-sm p-2 rounded-full hover:bg-error-container text-on-surface-variant hover:text-error transition-colors">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Layout -->
+<div class="flex flex-1 pt-16 h-full">
+<!-- SideNav (Generated from JSON) -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-64px)] w-64 bg-surface-container-low border-r border-outline-variant fixed left-0 top-16 p-base gap-sm z-40 overflow-y-auto">
+<div class="p-4 mb-2 flex items-center gap-3">
+<img alt="System Node" class="w-10 h-10 rounded-lg object-cover" data-alt="A stylized geometric vector icon resembling a secure server node or terminal processor, using strict shades of slate gray and primary blue on a stark white background, high-tech abstract modernist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBbUszQ4vCk1IFfNLfF4H7j_vV7TcO6yhysRTAMfGipyfPjJqJx89VpiG5V7aYtOUKfChaFWvRxN16F4kEcJYfy8BDNOoEg_Ky8S0KQxm_awuTZ90ei2_1jmPWPft2ufp641t_lIvSeqUL2QKaeGM8AyHz5FkhHWl1O-s32Lo6JlMxG6ihK0SauJtB8KxBy4cgcmy7zPUGAEZwE5o0dbmvQuDnU6iaW3SQl9Dqp0lTGvwdSPVe6SP-3na0Ime-svi512iFtKy8hV7Bi">
+<div>
+<h3 class="font-label-md text-label-md text-on-surface">Branch Terminal</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Terminal Active</p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-primary-fixed-variant font-bold bg-secondary-container transition-transform duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: &quot;FILL&quot; 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="font-label-md text-label-md">Transactions</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">lock</span>
+<span class="font-label-md text-label-md">Vault Status</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">shield</span>
+<span class="font-label-md text-label-md">Security</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-variant transition-colors duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">construction</span>
+<span class="font-label-md text-label-md">Maintenance</span>
+</a>
+</nav>
+<div class="mt-auto p-4 border-t border-outline-variant">
+<button class="w-full py-2 px-4 bg-surface text-error border border-error-container hover:bg-error-container hover:text-on-error-container rounded-lg font-label-md text-label-md transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">lock_reset</span>
+                    Secure Logout
+                </button>
+</div>
+</aside>
+<!-- Main Workspace (ATM Simulation Kiosk View) -->
+<main class="flex-1 lg:ml-64 p-md md:p-xl flex justify-center bg-surface-dim overflow-y-auto min-h-[calc(100vh-64px)]">
+<!-- Terminal Container (Max Width 1200) -->
+<div class="w-full max-w-[container-max] flex flex-col gap-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 mb-2 border-b border-outline-variant pb-6">
+<div>
+<h1 class="font-headline-display text-headline-display text-on-surface mb-2">Terminal Overview</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Real-time simulation environment for transaction processing.</p>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-lowest px-4 py-2 rounded-lg border border-outline-variant shadow-sm">
+<span class="material-symbols-outlined text-outline">calendar_today</span>
+<span class="font-label-md text-label-md text-on-surface-variant" id="current-date">Aug 25, 2026</span>
+</div>
+</div>
+<!-- Metrics Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md md:gap-lg">
+<!-- Account Balance Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-md relative overflow-hidden group hover:border-outline-variant transition-colors">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined text-[24px]">account_balance</span>
+</div>
+<div>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Available Balance</h2>
+<p class="font-body-sm text-body-sm text-outline">Account #10000001 • Demo User</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-container text-on-secondary-container font-label-md text-[12px]">
+<span class="material-symbols-outlined text-[14px]">speed</span>
+                                Redis Cached (60s TTL)
+                            </span>
+</div>
+<div class="mb-2">
+<span class="font-numeric-lg text-numeric-lg text-on-surface">₹10,000.00</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4 overflow-hidden">
+<div class="bg-primary h-full w-full rounded-full"></div>
+</div>
+</div>
+<!-- ATM Vault Card -->
+<div class="bg-surface-container-lowest rounded-xl border border-surface-variant p-md relative overflow-hidden group hover:border-outline-variant transition-colors">
+<div class="absolute top-0 right-0 w-32 h-32 bg-[#059669]/5 rounded-bl-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full bg-[#059669]/10 flex items-center justify-center text-[#059669]">
+<span class="material-symbols-outlined text-[24px]">inventory_2</span>
+</div>
+<div>
+<h2 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Vault Available Cash</h2>
+<p class="font-body-sm text-body-sm text-outline">Terminal ID: ATM-01</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#059669]/10 text-[#059669] font-label-md text-[12px]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#059669]"></span>
+                                Vault Operational
+                            </span>
+</div>
+<div class="mb-2">
+<span class="font-numeric-lg text-numeric-lg text-on-surface">₹50,000.00</span>
+</div>
+<div class="w-full bg-surface-container h-1.5 rounded-full mt-4 overflow-hidden flex">
+<div class="bg-[#059669] h-full w-[80%] rounded-l-full"></div>
+<div class="bg-surface-variant h-full w-[20%] rounded-r-full"></div>
+</div>
+</div>
+</div>
+<!-- Main Action Area (Withdrawal Panel) -->
+<div class="w-full max-w-2xl mx-auto mt-6">
+<div class="bg-surface-container-lowest rounded-[24px] shadow-[0px_20px_25px_-5px_rgba(15,23,42,0.12)] border border-outline-variant p-8 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-surface-tint to-primary-fixed"></div>
+<div class="text-center mb-8">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-2">Fast Cash Withdrawal</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Select a quick amount or enter a custom value below.</p>
+</div>
+<!-- Quick Denominations -->
+<div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface hover:bg-secondary-container hover:border-primary hover:text-on-primary-fixed-variant font-numeric-lg text-[24px] transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none">₹500</button>
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface hover:bg-secondary-container hover:border-primary hover:text-on-primary-fixed-variant font-numeric-lg text-[24px] transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none">₹1,000</button>
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface hover:bg-secondary-container hover:border-primary hover:text-on-primary-fixed-variant font-numeric-lg text-[24px] transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none">₹2,000</button>
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface hover:bg-secondary-container hover:border-primary hover:text-on-primary-fixed-variant font-numeric-lg text-[24px] transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none hidden md:block">₹5,000</button>
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface hover:bg-secondary-container hover:border-primary hover:text-on-primary-fixed-variant font-numeric-lg text-[24px] transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-primary focus:outline-none hidden md:block">₹10,000</button>
+<button class="py-4 px-6 rounded-xl border border-outline-variant bg-surface-container hover:bg-surface-variant text-on-surface-variant font-label-md text-label-md transition-all shadow-sm active:scale-95 focus:ring-2 focus:ring-outline focus:outline-none flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">more_horiz</span>
+                                Other
+                            </button>
+</div>
+<!-- Custom Input -->
+<div class="mb-8 relative">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2 ml-1" for="custom-amount">Custom Amount</label>
+<div class="relative flex items-center">
+<span class="absolute left-6 font-numeric-lg text-numeric-lg text-outline">₹</span>
+<input class="w-full pl-16 pr-6 py-5 rounded-xl border-2 border-outline-variant bg-surface font-numeric-lg text-numeric-lg text-on-surface focus:border-primary focus:ring-0 transition-colors shadow-inner" id="custom-amount" placeholder="0.00" readonly="" type="text" value="2000">
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col gap-4">
+<button class="w-full py-5 rounded-2xl bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-headline-md text-headline-md shadow-[0px_10px_15px_-3px_rgba(15,23,42,0.08)] transition-all active:scale-[0.98] flex items-center justify-center gap-3 group"><span class="material-symbols-outlined group-hover:animate-bounce">payments</span>
+                                Withdraw Funds</button>
+<button class="w-full py-4 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface-variant border border-outline-variant font-label-md text-label-md transition-all flex items-center justify-center gap-2 shadow-sm active:scale-95">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                                Reset Demo State
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Footer (Generated from JSON) -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant flex flex-col md:flex-row justify-between items-center px-gutter py-sm w-full z-50 relative mt-auto">
+<div class="font-label-md text-label-md text-on-surface mb-2 md:mb-0">
+<span class="material-symbols-outlined align-middle mr-1 text-[18px]">verified_user</span>
+            © 2024 Bellcorp Studio Financial Systems. Encrypted Session.
+        </div>
+<div class="flex items-center gap-md font-body-sm text-body-sm text-on-surface-variant">
+<a class="hover:text-primary transition-opacity duration-150" href="#">Privacy Policy</a>
+<span class="text-outline-variant">|</span>
+<span class="font-mono">Terminal ID: 8829-X</span>
+<span class="text-outline-variant">|</span>
+<a class="hover:text-primary transition-opacity duration-150 flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[16px]">support_agent</span>
+                Emergency Support
+            </a>
+</div>
+</footer>
+<script>
+        // Simple script to set current date
+        const dateElement = document.getElementById('current-date');
+        if(dateElement) {
+            const options = { month: 'short', day: 'numeric', year: 'numeric' };
+            dateElement.textContent = new Date().toLocaleDateString('en-US', options);
+        }
+    </script>
+
+
+
+
+
+
+</body></html>

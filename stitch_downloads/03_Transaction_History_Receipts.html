@@ -1,0 +1,411 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Transaction History - TrustTerminal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-background": "#191c1e",
+                        "tertiary": "#4f565c",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004ac6",
+                        "inverse-primary": "#b4c5ff",
+                        "outline": "#737686",
+                        "tertiary-fixed-dim": "#c1c7cf",
+                        "secondary-fixed": "#dae2fd",
+                        "on-secondary-container": "#5c647a",
+                        "surface-container-high": "#e6e8ea",
+                        "tertiary-container": "#676e75",
+                        "on-primary-fixed": "#00174b",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#41474e",
+                        "surface-dim": "#d8dadc",
+                        "on-tertiary-fixed": "#161c22",
+                        "secondary-container": "#dae2fd",
+                        "primary-fixed": "#dbe1ff",
+                        "secondary-fixed-dim": "#bec6e0",
+                        "primary-container": "#2563eb",
+                        "surface-container": "#eceef0",
+                        "background": "#f7f9fb",
+                        "surface-variant": "#e0e3e5",
+                        "tertiary-fixed": "#dde3eb",
+                        "on-tertiary-container": "#ebf1f9",
+                        "on-surface": "#191c1e",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#e0e3e5",
+                        "outline-variant": "#c3c6d7",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface": "#f7f9fb",
+                        "on-primary": "#ffffff",
+                        "surface-tint": "#0053db",
+                        "on-primary-container": "#eeefff",
+                        "surface-bright": "#f7f9fb",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "inverse-surface": "#2d3133",
+                        "inverse-on-surface": "#eff1f3",
+                        "error": "#ba1a1a",
+                        "secondary": "#565e74",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#434655",
+                        "on-secondary-fixed": "#131b2e",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed-variant": "#3f465c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "64px",
+                        "container-max": "1200px",
+                        "lg": "48px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "sm": "12px",
+                        "md": "24px",
+                        "base": "8px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-display": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "numeric-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "mono": ["Roboto Mono", "monospace"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "1", "letterSpacing": "0.02em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "1.5", "fontWeight": "400" }],
+                        "headline-display": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "headline-md": ["20px", { "lineHeight": "1.4", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "numeric-lg": ["36px", { "lineHeight": "1", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+                        "body-md": ["16px", { "lineHeight": "1.5", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .material-symbols-outlined[data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+        /* Custom Scrollbar for receipt */
+        .receipt-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .receipt-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .receipt-scroll::-webkit-scrollbar-thumb {
+            background: #c1c7cf;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md h-screen overflow-hidden flex flex-col md:flex-row">
+<!-- Mobile Top Navigation (visible md:hidden) -->
+<header class="md:hidden fixed top-0 left-0 w-full z-50 flex justify-between items-center px-gutter h-16 bg-surface-container-lowest border-b border-outline-variant shadow-sm transition-colors duration-200">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary text-xl" data-icon="account_balance">account_balance</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">TrustTerminal</span>
+</div>
+<div class="flex gap-sm">
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</div>
+</header>
+<!-- Side Navigation (hidden mobile, visible md:flex) -->
+<nav class="hidden md:flex flex-col h-screen fixed left-0 top-0 p-sm bg-surface-container-low text-primary font-label-md text-label-md docked h-full left-0 w-64 border-r border-outline-variant transition-colors duration-200 z-40">
+<div class="mb-lg px-sm pt-sm">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined text-primary text-2xl" data-icon="account_balance">account_balance</span>
+<span class="font-headline-md text-headline-md font-bold text-primary">TrustTerminal</span>
+</div>
+<!-- Secure Session Header -->
+<div class="bg-surface-container p-sm rounded-xl mb-4 border border-outline-variant/50">
+<div class="flex items-center gap-sm mb-2">
+<img alt="User Profile" class="w-8 h-8 rounded-full object-cover" data-alt="A small, professional user avatar placeholder for a secure banking session, neutral colors, minimalist vector illustration, light mode friendly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCligst0b1Vq63n9v0bqq3Rs7K6bsl6MIynhGw7jDlTUZLGys8T-Axpko9_k7i11SYTXhI5b1sfzyi1tasdJLNECGA5FlaXK6RBN-GKJ1ETxdiCTuxKTmClKUvLN-hIDDa7qARHVlueBI9u35MlZ3Ca1Qjy_Ylp2B_orRQlabn5bUW2JOQN770FrWq3n6FfQv6sbkmh4feVkCasF0GxaDkFLa0TdhZ7g03F05imO9-geP1ll_POhegklnAfdl5Bpqb7de-nJdOEX6Ey">
+<div>
+<div class="text-on-surface font-semibold text-sm">Secure Session</div>
+<div class="text-on-surface-variant text-xs font-mono">Terminal #ATM-4022</div>
+</div>
+</div>
+</div>
+</div>
+<ul class="flex flex-col gap-2 flex-grow px-2">
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-xl hover:bg-surface-variant transition-transform duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 transition-transform" data-icon="dashboard">dashboard</span>
+                    Dashboard
+                </a>
+</li>
+<li>
+<!-- Active Navigation -->
+<a class="flex items-center gap-md px-md py-sm bg-primary-container text-on-primary-container font-bold rounded-xl transition-transform duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 transition-transform" data-icon="receipt_long" data-weight="fill">receipt_long</span>
+                    Transactions
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-xl hover:bg-surface-variant transition-transform duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 transition-transform" data-icon="swap_horiz">swap_horiz</span>
+                    Transfer
+                </a>
+</li>
+<li>
+<a class="flex items-center gap-md px-md py-sm text-on-surface-variant hover:bg-surface-variant rounded-xl hover:bg-surface-variant transition-transform duration-150 group" href="#">
+<span class="material-symbols-outlined group-hover:scale-95 transition-transform" data-icon="settings">settings</span>
+                    Settings
+                </a>
+</li>
+</ul>
+<div class="mt-auto px-2 pb-md">
+<button class="w-full flex justify-center items-center gap-2 py-sm text-error border border-error/30 hover:bg-error-container rounded-xl transition-colors font-label-md">
+<span class="material-symbols-outlined text-sm" data-icon="power_settings_new">power_settings_new</span>
+                End Session
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 mt-16 md:mt-0 p-gutter bg-[#F8FAFC] overflow-y-auto relative h-full flex flex-col">
+<!-- Top App Bar Desktop Actions (Optional secondary nav/tools area if needed, but per prompt TopAppBar logic is in header for mobile. Let's add the desktop version of top app bar actions here to follow the JSON requirement closely) -->
+<div class="hidden md:flex justify-end items-center mb-md gap-sm">
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high text-on-surface-variant transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+</button>
+</div>
+<div class="flex-1 flex flex-col lg:flex-row gap-lg max-w-container-max mx-auto w-full pb-xl">
+<!-- Left Column: Ledger -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Ledger Header -->
+<div class="mb-lg">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-md mb-2">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-2">Transaction History</h1>
+<div class="inline-flex items-center gap-2 px-2 py-1 bg-surface-container-high rounded border border-outline-variant/40 mb-3">
+<span class="material-symbols-outlined text-xs text-on-surface-variant" data-icon="database">database</span>
+<span class="font-mono text-xs text-on-surface-variant uppercase tracking-wider">PostgreSQL Immutable Source of Truth</span>
+</div>
+<p class="text-on-surface-variant text-body-sm max-w-lg">
+                                Permanent historical record of all SUCCESS and FAILED cash withdrawal attempts across the network.
+                            </p>
+</div>
+<button class="inline-flex items-center gap-2 px-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors shadow-sm self-start sm:self-auto group">
+<span class="material-symbols-outlined text-primary group-hover:rotate-180 transition-transform duration-500" data-icon="refresh">refresh</span>
+<span class="font-label-md text-on-surface">Refresh</span>
+<span class="ml-2 px-2 py-0.5 bg-secondary-container text-on-secondary-container text-xs rounded-full font-medium">24 items</span>
+</button>
+</div>
+</div>
+<!-- Transaction Table (Clean Ledger Style) -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#E2E8F0] overflow-hidden shadow-sm flex-1 flex flex-col">
+<!-- Table Header -->
+<div class="grid grid-cols-12 gap-4 px-md py-sm bg-surface-container-low border-b border-[#E2E8F0] text-xs font-label-md text-on-surface-variant uppercase tracking-wider">
+<div class="col-span-3">Date &amp; Time</div>
+<div class="col-span-3">Transaction Type</div>
+<div class="col-span-2">Status</div>
+<div class="col-span-2 text-right">Amount</div>
+<div class="col-span-2 text-right">Balance Transition</div>
+</div>
+<!-- Table Body -->
+<div class="flex-1 overflow-y-auto">
+<!-- Row 1: Active/Selected -->
+<div class="grid grid-cols-12 gap-4 px-md py-4 border-b border-[#E2E8F0] items-center hover:bg-surface-container-low transition-colors cursor-pointer bg-primary-fixed/20 relative group">
+<!-- Active Indicator Line -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface">25 Aug 2026</div>
+<div class="text-xs text-on-surface-variant font-mono mt-0.5">09:30 PM</div>
+</div>
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm bg-primary-container p-1 rounded" data-icon="payments">payments</span>
+                                    Cash Withdrawal
+                                </div>
+<div class="text-xs text-on-surface-variant font-mono mt-1">Terminal • ATM-01</div>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#ecfdf5] text-[#065f46] text-xs font-semibold border border-[#a7f3d0]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                                    SUCCESS
+                                </span>
+</div>
+<div class="col-span-2 text-right">
+<div class="text-sm font-mono font-medium text-on-surface">- ₹1,000.00</div>
+</div>
+<div class="col-span-2 text-right text-xs font-mono text-on-surface-variant flex flex-col items-end">
+<span>₹10,000.00</span>
+<span class="material-symbols-outlined text-[10px] text-outline" data-icon="arrow_downward">arrow_downward</span>
+<span class="font-semibold text-on-surface">₹9,000.00</span>
+</div>
+</div>
+<!-- Row 2: Failed -->
+<div class="grid grid-cols-12 gap-4 px-md py-4 border-b border-[#E2E8F0] items-center hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface">25 Aug 2026</div>
+<div class="text-xs text-on-surface-variant font-mono mt-0.5">09:15 PM</div>
+</div>
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm bg-surface-container-high p-1 rounded" data-icon="payments">payments</span>
+                                    Cash Withdrawal
+                                </div>
+<div class="text-xs text-on-surface-variant font-mono mt-1">Terminal • ATM-01</div>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#fff1f2] text-[#9f1239] text-xs font-semibold border border-[#fecdd3]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#e11d48]"></span>
+                                    FAILED
+                                </span>
+<div class="text-[10px] text-error mt-1 uppercase font-mono max-w-full truncate" title="INSUFFICIENT_BALANCE">
+                                    INSUF_BALANCE
+                                </div>
+</div>
+<div class="col-span-2 text-right">
+<div class="text-sm font-mono font-medium text-on-surface opacity-50 line-through">- ₹2,000.00</div>
+</div>
+<div class="col-span-2 text-right text-xs font-mono text-on-surface-variant">
+<span>₹10,000.00</span>
+<div class="text-outline mt-1 italic text-[10px]">Unchanged</div>
+</div>
+</div>
+<!-- Row 3: Success -->
+<div class="grid grid-cols-12 gap-4 px-md py-4 border-b border-[#E2E8F0] items-center hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface">24 Aug 2026</div>
+<div class="text-xs text-on-surface-variant font-mono mt-0.5">02:45 PM</div>
+</div>
+<div class="col-span-3">
+<div class="text-sm font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm bg-surface-container-high p-1 rounded" data-icon="payments">payments</span>
+                                    Cash Withdrawal
+                                </div>
+<div class="text-xs text-on-surface-variant font-mono mt-1">Terminal • ATM-02</div>
+</div>
+<div class="col-span-2">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#ecfdf5] text-[#065f46] text-xs font-semibold border border-[#a7f3d0]">
+<span class="w-1.5 h-1.5 rounded-full bg-[#10b981]"></span>
+                                    SUCCESS
+                                </span>
+</div>
+<div class="col-span-2 text-right">
+<div class="text-sm font-mono font-medium text-on-surface">- ₹500.00</div>
+</div>
+<div class="col-span-2 text-right text-xs font-mono text-on-surface-variant flex flex-col items-end">
+<span>₹10,500.00</span>
+<span class="material-symbols-outlined text-[10px] text-outline" data-icon="arrow_downward">arrow_downward</span>
+<span class="font-semibold text-on-surface">₹10,000.00</span>
+</div>
+</div>
+<!-- Spacer for scrolling -->
+<div class="h-8"></div>
+</div>
+</div>
+</div>
+<!-- Right Column: Detail Receipt Drawer (Active state) -->
+<aside class="w-full lg:w-[380px] flex-shrink-0 flex flex-col">
+<div class="bg-surface-container-lowest rounded-xl border border-[#E2E8F0] shadow-[0px_20px_25px_-5px_rgba(15,23,42,0.12)] p-6 flex flex-col h-full sticky top-lg">
+<div class="flex justify-between items-center mb-6">
+<h2 class="font-headline-md text-headline-md text-on-surface">Transaction Detail</h2>
+<button class="p-1 rounded-md hover:bg-surface-container text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="close">close</span>
+</button>
+</div>
+<!-- Thermal Receipt Card Simulation -->
+<div class="bg-[#fcfdfd] border-t-4 border-primary border-x border-b border-[#e2e8f0] p-6 font-mono text-sm shadow-inner relative overflow-hidden receipt-scroll flex-1 mb-6">
+<!-- Watermark/Texture overlay -->
+<div class="absolute inset-0 opacity-[0.03] pointer-events-none" data-alt="Subtle, barely visible paper texture pattern for an ATM receipt background, light grayscale, noise and grain, seamless tile." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDdaklTUrDtmonCFI6ObrTyxNVroKPPFHdb5Ocv4z4gn-9L6TWDMqY2-BZrEg7RF7Vxd6ufbsDaYSNsLOxiKNY9rakY0xWQzmjs3ytR5uPVWc7T_jheRmEL0xXx6yOuc-2DZCamAymPTBipIgkDjZ6tHmAm3KFuBU3BZmnhBqnxNLyjWndOTWyxbsWGaOrwWQcWopeXe9nIcVmuiYd6BrIWsBFwRvgGSM98CSZ75iuoNMpKfZkFEOJ75_M_H1ZIsFndrZTKwIL9rnjX');"></div>
+<div class="text-center mb-6 border-b border-dashed border-outline-variant pb-4 relative z-10">
+<div class="font-bold text-lg tracking-widest text-on-surface uppercase mb-1">Bellcorp Bank</div>
+<div class="text-xs text-on-surface-variant">TrustTerminal Network</div>
+</div>
+<div class="space-y-4 relative z-10 text-on-surface-variant">
+<div class="flex justify-between">
+<span>DATE:</span>
+<span class="text-on-surface font-medium">25/08/2026</span>
+</div>
+<div class="flex justify-between">
+<span>TIME:</span>
+<span class="text-on-surface font-medium">21:30:45</span>
+</div>
+<div class="flex justify-between">
+<span>TERM ID:</span>
+<span class="text-on-surface font-medium">ATM-4022</span>
+</div>
+<div class="flex justify-between">
+<span>REF NO:</span>
+<span class="text-on-surface font-medium">TXN-8829-XP-01</span>
+</div>
+<div class="flex justify-between">
+<span>CARD:</span>
+<span class="text-on-surface font-medium">**** **** **** 4209</span>
+</div>
+<div class="border-t border-dashed border-outline-variant pt-4 mt-4"></div>
+<div class="text-center uppercase font-bold text-on-surface tracking-wider mb-4">
+                                Cash Withdrawal
+                            </div>
+<div class="flex justify-between items-end">
+<span>AMOUNT:</span>
+<span class="text-2xl font-bold text-on-surface">₹1,000.00</span>
+</div>
+<div class="flex justify-between text-xs mt-1">
+<span>DISPENSED:</span>
+<span>2 x ₹500</span>
+</div>
+<div class="border-t border-dashed border-outline-variant pt-4 mt-4"></div>
+<div class="flex justify-between items-center bg-surface-container p-2 rounded">
+<span class="font-medium text-on-surface">AVAIL BAL:</span>
+<span class="text-lg font-bold text-primary">₹9,000.00</span>
+</div>
+</div>
+<div class="text-center mt-8 text-xs text-outline italic relative z-10">
+                            Thank you for banking with Bellcorp.
+                        </div>
+<!-- Jagged bottom edge simulation -->
+<div class="absolute bottom-0 left-0 w-full h-2" style="background-image: radial-gradient(circle at 4px 4px, transparent 4px, #fcfdfd 5px); background-size: 8px 8px; background-position: -4px 4px;"></div>
+</div>
+<!-- Actions -->
+<div class="flex flex-col gap-3 mt-auto">
+<button class="w-full flex justify-center items-center gap-2 py-3 bg-primary text-on-primary rounded-lg font-label-md hover:bg-[#003ea8] hover:shadow-[0px_10px_15px_-3px_rgba(15,23,42,0.08)] transition-all duration-200">
+<span class="material-symbols-outlined" data-icon="print">print</span>
+                            Print Receipt
+                        </button>
+<button class="w-full flex justify-center items-center gap-2 py-3 bg-surface-container-lowest text-primary border border-outline-variant rounded-lg font-label-md hover:bg-surface-container-low transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="download">download</span>
+                            Download PDF
+                        </button>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</body></html>
