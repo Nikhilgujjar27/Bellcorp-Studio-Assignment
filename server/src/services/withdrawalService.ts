@@ -220,14 +220,22 @@ export class WithdrawalService {
     balanceBefore: number
   ): Promise<void> {
     try {
+      let resolvedBalance = balanceBefore;
+      if (!resolvedBalance || resolvedBalance === 0) {
+        const accRes = await query('SELECT balance FROM accounts WHERE id = $1', [accountId]);
+        if (accRes.rows.length > 0) {
+          resolvedBalance = parseFloat(accRes.rows[0].balance.toString());
+        }
+      }
+
       await query(
         `INSERT INTO withdrawals 
          (account_id, atm_id, amount, status, failure_reason, balance_before, balance_after, created_at) 
          VALUES ($1, $2, $3, 'FAILED', $4, $5, $5, CURRENT_TIMESTAMP)`,
-        [accountId, atmId, amount, reason, balanceBefore]
+        [accountId, atmId, amount, reason, resolvedBalance]
       );
     } catch (err: any) {
-      logger.warn('Failed to record failed withdrawal entry in DB:', err.message);
+      logger.warn('Failed to record failed withdrawal in ledger:', err.message);
     }
   }
 }
