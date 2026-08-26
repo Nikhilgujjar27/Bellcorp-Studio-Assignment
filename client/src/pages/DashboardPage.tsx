@@ -33,10 +33,8 @@ interface DashboardPageProps {
 }
 
 export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) => {
-  // Navigation State (4 Tabs matching Stitch sidebar)
   const [activeTab, setActiveTab] = useState<'dashboard' | 'concurrency' | 'transactions' | 'vault'>('dashboard');
 
-  // Banking State
   const [balance, setBalance] = useState<number | null>(null);
   const [isCached, setIsCached] = useState(false);
   const [atmStatus, setAtmStatus] = useState<IAtmStatus | null>(null);
@@ -208,9 +206,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col md:flex-row text-slate-900">
-      {/* ------------------------------------------------------------- */}
-      {/* LEFT SIDEBAR NAVIGATION (Matching Stitch Screen 2, 3 & 4)    */}
-      {/* ------------------------------------------------------------- */}
       <aside className="w-full md:w-64 bg-white border-r border-slate-200/90 flex flex-col justify-between p-4 sm:p-5 shrink-0">
         <div>
           {/* Brand Header */}
@@ -355,12 +350,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
           </div>
         )}
 
-        {/* ============================================================= */}
-        {/* VIEW 1: TERMINAL DASHBOARD & CASH WITHDRAWAL (Stitch Screen 2) */}
-        {/* ============================================================= */}
         {activeTab === 'dashboard' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-6xl w-full mx-auto">
-            {/* Page Header */}
             <div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Terminal Overview</h1>
               <p className="text-xs sm:text-sm text-slate-500 font-medium mt-1">
@@ -368,7 +359,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               </p>
             </div>
 
-            {/* 2-Column Metrics Cards (Matching Stitch Screen 2) */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
               {/* Card 1: Available Balance */}
               <div className="bg-white rounded-3xl p-6 sm:p-7 border border-slate-200/90 shadow-sm relative overflow-hidden flex flex-col justify-between">
@@ -440,7 +430,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               </div>
             </div>
 
-            {/* Fast Cash Withdrawal Panel (Centered White Card Matching Stitch Screen 2) */}
             <div className="max-w-xl mx-auto bg-white rounded-3xl border border-slate-200/90 p-7 sm:p-9 shadow-xl shadow-slate-200/50">
               <div className="text-center mb-6">
                 <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">Fast Cash Withdrawal</h2>
@@ -450,7 +439,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               </div>
 
               <form onSubmit={handleWithdrawSubmit} className="space-y-5">
-                {/* 6-Grid Denomination Pills */}
                 <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
                   {[500, 1000, 2000, 5000, 10000].map((val) => {
                     const isSelected = withdrawAmount === val.toString();
@@ -561,12 +549,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
           </div>
         )}
 
-        {/* ============================================================= */}
-        {/* VIEW 2: CONCURRENCY SAFETY LAB (Exact Stitch Screen 4 Soft Tinted) */}
-        {/* ============================================================= */}
         {activeTab === 'concurrency' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl w-full mx-auto">
-            {/* Soft-Tinted Sandbox Header Card (Matching Stitch Screen 4 exact HTML) */}
             <section className="bg-slate-100/70 text-slate-900 rounded-[2rem] p-6 sm:p-8 shadow-sm relative overflow-hidden border border-slate-200">
               <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
                 <Database className="w-32 h-32 text-blue-600" />
@@ -772,12 +756,8 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
           </div>
         )}
 
-        {/* ============================================================= */}
-        {/* VIEW 3: TRANSACTION HISTORY & RECEIPTS (Stitch Screen 3)       */}
-        {/* ============================================================= */}
         {activeTab === 'transactions' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-6xl w-full mx-auto">
-            {/* Header with Badges */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Transaction History</h1>
@@ -802,9 +782,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
               </div>
             </div>
 
-            {/* Split Screen: Ledger Table on Left + Receipt Detail on Right */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-              {/* Ledger Table (2 Columns wide) */}
               <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs sm:text-sm">
@@ -874,7 +852,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
                 </div>
               </div>
 
-              {/* Receipt Detail Card (Matching Stitch Screen 3) */}
               <div className="bg-white rounded-3xl border border-slate-200/90 p-6 shadow-md sticky top-24">
                 <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
                   <div className="font-extrabold text-sm text-slate-900">Transaction Detail</div>
@@ -946,9 +923,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({ user, onLogout }) 
           </div>
         )}
 
-        {/* ============================================================= */}
-        {/* VIEW 4: VAULT STATUS (Stitch Screen 2 Extension)               */}
-        {/* ============================================================= */}
         {activeTab === 'vault' && (
           <div className="p-4 sm:p-8 space-y-6 sm:space-y-8 max-w-5xl w-full mx-auto">
             <div>

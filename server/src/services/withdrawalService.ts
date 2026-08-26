@@ -13,22 +13,13 @@ export interface ExecuteWithdrawalParams {
 
 export class WithdrawalService {
   /**
-   * Concurrency-Safe Cash Withdrawal
-   * 
-   * Strict Execution Rules:
-   * 1. Lock 1: Account row (SELECT ... FROM accounts WHERE id = $1 FOR UPDATE)
-   * 2. Lock 2: ATM machine row (SELECT ... FROM atm WHERE id = $2 FOR UPDATE)
-   * 3. Consistent lock order eliminates deadlocks.
-   * 4. Every withdrawal attempt produces a PostgreSQL record in `withdrawals` table.
-   * 5. Failed withdrawals do NOT modify account balance or ATM cash.
-   * 6. PostgreSQL is the ONLY financial source of truth.
-   * 7. Cache invalidation and MongoDB audit logging are post-commit and non-blocking.
+   * Concurrency-safe cash withdrawal using pessimistic row-level locking.
+   * Acquires row locks in consistent order (account -> ATM vault) to avoid deadlocks.
    */
   static async withdraw(params: ExecuteWithdrawalParams): Promise<WithdrawalResult> {
     const { accountId, amount } = params;
     const atmId = params.atmId || 1;
 
-    // 1. Validation Checks
     if (typeof amount !== 'number' || isNaN(amount) || amount <= 0) {
       throw new ValidationError('Withdrawal amount must be a positive number');
     }
@@ -41,10 +32,9 @@ export class WithdrawalService {
     let capturedBalanceBefore = 0;
 
     try {
-      // 2. Start PostgreSQL ACID Transaction
       await client.query('BEGIN');
 
-      // 3. Strict Lock Order 1: Lock target account row
+      // Lock target account row
       const accountRes = await client.query(
         'SELECT id, balance FROM accounts WHERE id = $1 FOR UPDATE',
         [accountId]
@@ -58,7 +48,7 @@ export class WithdrawalService {
       const balanceBefore = parseFloat(accountRes.rows[0].balance.toString());
       capturedBalanceBefore = balanceBefore;
 
-      // 4. Strict Lock Order 2: Lock target ATM vault row
+      // Lock ATM cash reservoir row
       const atmRes = await client.query(
         'SELECT id, available_cash FROM atm WHERE id = $1 FOR UPDATE',
         [atmId]
@@ -71,9 +61,8 @@ export class WithdrawalService {
 
       const atmCashBefore = parseFloat(atmRes.rows[0].available_cash.toString());
 
-      // 5. Balance Validation
+      // Validate account balance
       if (balanceBefore < amount) {
-        // Record FAILED withdrawal attempt in PostgreSQL without altering balances
         await client.query(
           `INSERT INTO withdrawals 
            (account_id, atm_id, amount, status, failure_reason, balance_before, balance_after, created_at) 
@@ -83,7 +72,6 @@ export class WithdrawalService {
 
         await client.query('COMMIT');
 
-        // Non-blocking MongoDB audit log
         AuditService.log({
           eventType: 'WITHDRAWAL_FAILED',
           accountId,
@@ -100,7 +88,7 @@ export class WithdrawalService {
         throw new InsufficientBalanceError(`Insufficient account balance. Available: ₹${balanceBefore}, Requested: ₹${amount}`);
       }
 
-      // 6. ATM Vault Cash Validation
+      // Validate ATM cash capacity
       if (atmCashBefore < amount) {
         await client.query(
           `INSERT INTO withdrawals 
@@ -127,21 +115,20 @@ export class WithdrawalService {
         throw new AtmCashUnavailableError(`ATM does not have sufficient cash. Available: ₹${atmCashBefore}, Requested: ₹${amount}`);
       }
 
-      // 7. Deduct Account Balance
+      // Deduct balance and physical vault cash
       const balanceAfter = parseFloat((balanceBefore - amount).toFixed(2));
       await client.query(
         'UPDATE accounts SET balance = balance - $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         [amount, accountId]
       );
 
-      // 8. Deduct ATM Physical Vault Cash
       const atmCashAfter = parseFloat((atmCashBefore - amount).toFixed(2));
       await client.query(
         'UPDATE atm SET available_cash = available_cash - $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2',
         [amount, atmId]
       );
 
-      // 9. Record Successful Withdrawal in PostgreSQL
+      // Record transaction
       const insertRes = await client.query(
         `INSERT INTO withdrawals 
          (account_id, atm_id, amount, status, failure_reason, balance_before, balance_after, created_at) 
@@ -153,14 +140,12 @@ export class WithdrawalService {
       const withdrawalId = insertRes.rows[0].id;
       const createdAt = insertRes.rows[0].created_at;
 
-      // 10. Commit PostgreSQL Transaction (Releases all locks)
       await client.query('COMMIT');
       logger.info(`Withdrawal SUCCESS: Account #${accountId}, Amount: ₹${amount}, Balance After: ₹${balanceAfter}`);
 
-      // 11. Post-Commit: Invalidate Redis Balance Cache
+      // Post-commit side effects: cache invalidation and async audit logging
       await CacheService.invalidateBalance(accountId);
 
-      // 12. Post-Commit: Asynchronous MongoDB Activity Logging (Non-blocking)
       AuditService.log({
         eventType: 'WITHDRAWAL_SUCCESS',
         accountId,
