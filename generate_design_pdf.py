@@ -199,6 +199,50 @@ def build_pdf():
         textColor=C_SECONDARY
     )
 
+    style_diag_title = ParagraphStyle(
+        'DiagTitle',
+        fontName='SegoeUI-Bold',
+        fontSize=8.5,
+        leading=11,
+        textColor=C_PRIMARY,
+        alignment=1
+    )
+
+    style_diag_header = ParagraphStyle(
+        'DiagHeader',
+        fontName='SegoeUI-Bold',
+        fontSize=8,
+        leading=10,
+        textColor=colors.white,
+        alignment=1
+    )
+
+    style_diag_sub = ParagraphStyle(
+        'DiagSub',
+        fontName='SegoeUI-Bold',
+        fontSize=7.2,
+        leading=9,
+        textColor=C_SECONDARY,
+        alignment=1
+    )
+
+    style_diag_text = ParagraphStyle(
+        'DiagText',
+        fontName='SegoeUI',
+        fontSize=6.8,
+        leading=8.5,
+        textColor=C_TEXT
+    )
+
+    style_diag_arrow = ParagraphStyle(
+        'DiagArrow',
+        fontName='SegoeUI-Bold',
+        fontSize=7.2,
+        leading=9,
+        textColor=C_ACCENT,
+        alignment=1
+    )
+
     story = []
 
     # ==================================================================
@@ -296,7 +340,244 @@ def build_pdf():
     story.append(PageBreak())
 
     # ==================================================================
-    # PAGE 2: TWO-ACCOUNT ARCHITECTURE & DATABASE SCHEMA
+    # PAGE 2: HIGH-LEVEL SYSTEM ARCHITECTURE DIAGRAM (NEW PLACEMENT)
+    # ==================================================================
+    story.append(Paragraph("High-Level System Architecture", style_h1))
+    story.append(Paragraph(
+        "The following enterprise architectural diagram details the end-to-end component hierarchy, data flows, "
+        "containerized infrastructure boundaries, and real-time concurrency resolution lifecycle:",
+        style_body
+    ))
+    story.append(Spacer(1, 2))
+
+    # --- ARCHITECTURE DIAGRAM FLOWABLES ---
+    
+    # 1. User / Browser Box
+    user_box = [
+        [Paragraph("<b>USER / CLIENT BROWSER</b>", style_diag_header)],
+        [Paragraph("Standard Banking Sessions (PIN Login, Fast Cash Withdrawals, Ledger) & Concurrency Stress Test Requests", style_diag_text)]
+    ]
+    t_user = Table(user_box, colWidths=[515.27])
+    t_user.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#334155')),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#F1F5F9')),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#64748B')),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+    ]))
+    story.append(t_user)
+
+    # Arrow Down
+    story.append(Paragraph("↓ &nbsp; User Interaction / HTTPS Navigation", style_diag_arrow))
+
+    # 2. Frontend Tier Box
+    fe_box = [
+        [Paragraph("<b>REACT 18 + VITE + TYPESCRIPT FRONTEND TIER (Client Application)</b>", style_diag_header)],
+        [Paragraph(
+            "<b>Key UI Modules:</b> &nbsp; • Secure PIN Authentication &nbsp; • Terminal Overview &nbsp; • Available Balance Card (Redis TTL Indicator)<br/>"
+            "• Fast Cash Withdrawal Panel &nbsp; • Monospace Receipt Generator &nbsp; • Live Concurrency Safety Lab (Thread 1 vs Thread 2)",
+            style_diag_text
+        )]
+    ]
+    t_fe = Table(fe_box, colWidths=[515.27])
+    t_fe.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), C_SECONDARY),
+        ('BACKGROUND', (0, 1), (-1, 1), C_BG_BLUE),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#93C5FD')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    story.append(t_fe)
+
+    # Arrow Down
+    story.append(Paragraph("↓ &nbsp; REST API / HTTPS &nbsp; (JSON Request Payloads • JWT Bearer Token Authorization)", style_diag_arrow))
+
+    # 3. Backend API Tier Box
+    api_box = [
+        [Paragraph("<b>NODE.JS + EXPRESS + TYPESCRIPT API SERVER (Application Gateway & Transaction Orchestrator)</b>", style_diag_header)],
+        [Paragraph(
+            "<b>Middleware & Services:</b> &nbsp; • JWT Auth Guard &nbsp; • Zod Schema Validation &nbsp; • Sliding Rate Limiter (10 req/min)<br/>"
+            "• Controller Layer &nbsp; • Pessimistic Transaction Orchestrator (<code>BEGIN ... COMMIT / ROLLBACK</code>) &nbsp; • Async Event Dispatcher",
+            style_diag_text
+        )]
+    ]
+    t_api = Table(api_box, colWidths=[515.27])
+    t_api.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), C_PRIMARY),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#F8FAFC')),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#94A3B8')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+        ('LEFTPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    story.append(t_api)
+
+    # 3 Data Flow Indicators
+    flow_labels = [
+        [
+            Paragraph("↓ &nbsp; <b>PostgreSQL Connection Pool</b><br/>Financial Txns, Balances, Ledger", style_diag_sub),
+            Paragraph("↔ &nbsp; <b>Redis Client (ioredis)</b><br/>Balance Cache (60s) & Rate Limiting", style_diag_sub),
+            Paragraph("→ &nbsp; <b>MongoDB Client (Mongoose)</b><br/>Asynchronous Audit Stream", style_diag_sub),
+        ]
+    ]
+    t_flow = Table(flow_labels, colWidths=[171.75, 171.75, 171.75])
+    t_flow.setStyle(TableStyle([
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('TOPPADDING', (0, 0), (-1, -1), 1),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 1),
+    ]))
+    story.append(t_flow)
+
+    # 4. Three Backend Data Services (Enclosed in Docker Infrastructure Boundary)
+    db_col_pg = [
+        [Paragraph("<b>POSTGRESQL 15 (Docker)</b>", style_diag_header)],
+        [Paragraph("<b>Authoritative Financial Source of Truth</b>", style_diag_sub)],
+        [Paragraph(
+            "<b>Tables & Entities:</b><br/>"
+            "• <code>accounts</code> (id, balance, pin)<br/>"
+            "• <code>atm</code> (id, available_cash)<br/>"
+            "• <code>withdrawals</code> (ledger)<br/>"
+            "<b>Integrity Invariants:</b><br/>"
+            "• Strict ACID Transactions<br/>"
+            "• <code>SELECT ... FOR UPDATE</code><br/>"
+            "• <code>CHECK (balance &gt;= 0)</code>",
+            style_diag_text
+        )]
+    ]
+    t_db_pg = Table(db_col_pg, colWidths=[163])
+    t_db_pg.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#0F766E')),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#CCFBF1')),
+        ('BACKGROUND', (0, 2), (-1, 2), colors.HexColor('#F0FDFA')),
+        ('BOX', (0, 0), (-1, -1), 0.75, colors.HexColor('#14B8A6')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+
+    db_col_redis = [
+        [Paragraph("<b>REDIS 7 (Docker)</b>", style_diag_header)],
+        [Paragraph("<b>Cache + Rate Limiting</b>", style_diag_sub)],
+        [Paragraph(
+            "<b>Key Stores & TTL:</b><br/>"
+            "• <code>atm:balance:&lt;id&gt;</code> (60s TTL)<br/>"
+            "• <code>rl:acc:&lt;id&gt;</code> (Sliding Window)<br/>"
+            "<b>Mutation Behavior:</b><br/>"
+            "• Cache-Aside Pattern<br/>"
+            "• Instant <code>DEL</code> on Commit<br/>"
+            "• Fail-Open Resiliency",
+            style_diag_text
+        )]
+    ]
+    t_db_redis = Table(db_col_redis, colWidths=[163])
+    t_db_redis.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#B45309')),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#FEF3C7')),
+        ('BACKGROUND', (0, 2), (-1, 2), colors.HexColor('#FFFBEB')),
+        ('BOX', (0, 0), (-1, -1), 0.75, colors.HexColor('#F59E0B')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+
+    db_col_mongo = [
+        [Paragraph("<b>MONGODB 6.0 (Docker)</b>", style_diag_header)],
+        [Paragraph("<b>Asynchronous Audit Store</b>", style_diag_sub)],
+        [Paragraph(
+            "<b>Collections & Events:</b><br/>"
+            "• <code>activitylogs</code> Collection<br/>"
+            "• <code>LOGIN</code> & <code>BALANCE_CHECK</code><br/>"
+            "• <code>WITHDRAWAL_SUCCESS</code><br/>"
+            "• <code>WITHDRAWAL_FAILED</code><br/>"
+            "<b>Isolation Guarantee:</b><br/>"
+            "• Non-blocking async write<br/>"
+            "• Zero transactional overhead",
+            style_diag_text
+        )]
+    ]
+    t_db_mongo = Table(db_col_mongo, colWidths=[163])
+    t_db_mongo.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#4338CA')),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#EDE9FE')),
+        ('BACKGROUND', (0, 2), (-1, 2), colors.HexColor('#F5F3FF')),
+        ('BOX', (0, 0), (-1, -1), 0.75, colors.HexColor('#8B5CF6')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
+        ('LEFTPADDING', (0, 0), (-1, -1), 4),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 4),
+    ]))
+
+    docker_inner = [
+        [
+            Paragraph("<b>DOCKER INFRASTRUCTURE ENVIRONMENT &nbsp; (Internal Bridge Network: <code>atm_network</code>)</b>", style_diag_title),
+            "", ""
+        ],
+        [t_db_pg, t_db_redis, t_db_mongo]
+    ]
+    t_docker = Table(docker_inner, colWidths=[169, 169, 169])
+    t_docker.setStyle(TableStyle([
+        ('SPAN', (0, 0), (2, 0)),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#F1F5F9')),
+        ('BACKGROUND', (0, 1), (-1, 1), colors.HexColor('#FAFAFA')),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#94A3B8')),
+        ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ('LEFTPADDING', (0, 0), (-1, -1), 3),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 3),
+    ]))
+    story.append(t_docker)
+    story.append(Spacer(1, 3))
+
+    # 5. Highlighted Concurrency Flow & Two-Account State Isolation
+    conc_highlight = [
+        [
+            Paragraph("<b>ACID CONCURRENCY SAFETY & TWO-ACCOUNT RUNTIME ISOLATION FLOW</b>", style_diag_header),
+            ""
+        ],
+        [
+            Paragraph(
+                "<b>Account #1 — Demo User (Normal Banking Session)</b><br/>"
+                "• Baseline Balance: <b>₹10,000.00</b> (PIN <code>1234</code>)<br/>"
+                "• User-facing login for withdrawals and receipts.<br/>"
+                "• <b>100% Runtime Isolation:</b> Balance is strictly preserved and never mutated by Concurrency Lab executions.",
+                style_diag_text
+            ),
+            Paragraph(
+                "<b>Account #2 — Concurrency Sandbox (₹3,000 Baseline)</b><br/>"
+                "• Concurrency Stress Test: <b>2x ₹2,000 simultaneous requests</b>.<br/>"
+                "• <b>PostgreSQL <code>SELECT ... FOR UPDATE</code> Row Lock:</b><br/>"
+                "&nbsp; → <b>Request A:</b> Lock acquired → <b>HTTP 200 OK</b> (Balance: ₹1,000).<br/>"
+                "&nbsp; → <b>Request B:</b> Blocked → unblocks → Insufficient Funds → <b>HTTP 409 Conflict</b>.<br/>"
+                "• <b>Final Balance: Strictly ₹1,000.00</b> (Zero Overdraft Guarantee).",
+                style_diag_text
+            )
+        ]
+    ]
+    t_conc_hl = Table(conc_highlight, colWidths=[253.63, 253.63])
+    t_conc_hl.setStyle(TableStyle([
+        ('SPAN', (0, 0), (1, 0)),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1E293B')),
+        ('BACKGROUND', (0, 1), (0, 1), colors.HexColor('#F8FAFC')),
+        ('BACKGROUND', (1, 1), (1, 1), colors.HexColor('#FEF2F2')),
+        ('BOX', (0, 0), (-1, -1), 1, colors.HexColor('#DC2626')),
+        ('LINEBEFORE', (1, 1), (1, 1), 1, colors.HexColor('#CBD5E1')),
+        ('TOPPADDING', (0, 0), (-1, -1), 2.5),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 2.5),
+        ('LEFTPADDING', (0, 0), (-1, -1), 5),
+        ('RIGHTPADDING', (0, 0), (-1, -1), 5),
+    ]))
+    story.append(t_conc_hl)
+
+    story.append(PageBreak())
+
+    # ==================================================================
+    # PAGE 3: TWO-ACCOUNT ARCHITECTURE & DATABASE SCHEMA
     # ==================================================================
     story.append(Paragraph("3. Two-Account Architecture & State Isolation", style_h1))
     story.append(Paragraph(
