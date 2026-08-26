@@ -60,6 +60,28 @@ export const seedDatabase = async () => {
       logger.info('Reset Concurrency Sandbox Account #2 to ₹3,000.00');
     }
 
+    // 5. Upsert Additional Real User Account #3 (Sarah Jenkins - ₹25,000.00)
+    const acc3Check = await query('SELECT id FROM accounts WHERE id = 3');
+    if (acc3Check.rows.length === 0) {
+      await query(
+        `INSERT INTO accounts (id, account_number, holder_name, pin_hash, balance, created_at, updated_at) 
+         VALUES (3, '10000003', 'Sarah Jenkins', $1, 25000.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+        [pinHash]
+      );
+      logger.info('Seeded User Account #3: #10000003 (Sarah Jenkins) with ₹25,000.00');
+    }
+
+    // 6. Upsert Additional Real User Account #4 (Rajesh Kumar - ₹5,000.00)
+    const acc4Check = await query('SELECT id FROM accounts WHERE id = 4');
+    if (acc4Check.rows.length === 0) {
+      await query(
+        `INSERT INTO accounts (id, account_number, holder_name, pin_hash, balance, created_at, updated_at) 
+         VALUES (4, '10000004', 'Rajesh Kumar', $1, 5000.00, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
+        [pinHash]
+      );
+      logger.info('Seeded User Account #4: #10000004 (Rajesh Kumar) with ₹5,000.00');
+    }
+
     // Advance serial sequence to avoid conflicts with auto-generated IDs
     await query(`SELECT setval(pg_get_serial_sequence('accounts', 'id'), coalesce((SELECT max(id) FROM accounts), 1))`);
 

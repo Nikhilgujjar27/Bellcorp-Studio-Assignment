@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Lock, CreditCard, ArrowRight, Loader2, AlertCircle, User } from 'lucide-react';
+import { ShieldCheck, Lock, CreditCard, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { authService, UserAccount } from '../services/api';
 
 interface LoginPageProps {
@@ -29,12 +29,6 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleFillDemo = () => {
-    setAccountNumber('10000001');
-    setPin('1234');
-    setError(null);
   };
 
   return (
@@ -130,16 +124,63 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
             </button>
           </form>
 
-          {/* Demo Account Helper Button */}
-          <div className="mt-5 pt-4 border-t border-slate-100">
-            <button
-              type="button"
-              onClick={handleFillDemo}
-              className="w-full py-3 px-4 rounded-2xl bg-blue-50/70 hover:bg-blue-100 text-blue-700 border border-blue-200/70 font-semibold text-xs sm:text-sm transition-all duration-150 cursor-pointer flex items-center justify-center space-x-2"
-            >
-              <User className="w-4 h-4 text-blue-600 shrink-0" />
-              <span>Use Demo Account (10000001 / 1234)</span>
-            </button>
+          {/* Test Account Helper Switcher */}
+          <div className="mt-5 pt-4 border-t border-slate-100 space-y-2">
+            <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider text-center">
+              Available Test Accounts (PIN: 1234)
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setAccountNumber('10000001');
+                  setPin('1234');
+                  setError(null);
+                }}
+                className={`py-2 px-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer text-center ${
+                  accountNumber === '10000001'
+                    ? 'bg-blue-50 text-blue-700 border-blue-300 font-bold shadow-xs'
+                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                }`}
+              >
+                <div>Demo User</div>
+                <div className="font-mono text-[10px] text-slate-500">10000001 (₹10k)</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAccountNumber('10000003');
+                  setPin('1234');
+                  setError(null);
+                }}
+                className={`py-2 px-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer text-center ${
+                  accountNumber === '10000003'
+                    ? 'bg-blue-50 text-blue-700 border-blue-300 font-bold shadow-xs'
+                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                }`}
+              >
+                <div>Sarah Jenkins</div>
+                <div className="font-mono text-[10px] text-slate-500">10000003 (₹25k)</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAccountNumber('10000004');
+                  setPin('1234');
+                  setError(null);
+                }}
+                className={`py-2 px-2.5 rounded-xl border text-xs font-semibold transition cursor-pointer text-center ${
+                  accountNumber === '10000004'
+                    ? 'bg-blue-50 text-blue-700 border-blue-300 font-bold shadow-xs'
+                    : 'bg-slate-50 hover:bg-slate-100 text-slate-700 border-slate-200'
+                }`}
+              >
+                <div>Rajesh Kumar</div>
+                <div className="font-mono text-[10px] text-slate-500">10000004 (₹5k)</div>
+              </button>
+            </div>
           </div>
         </div>
 
